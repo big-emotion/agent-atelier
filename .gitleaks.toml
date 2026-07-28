@@ -6,5 +6,5 @@ useDefault = true
 [allowlist]
 paths = [
   # Documented placeholder examples inside the gitleaks template itself.
-  '''skills/setup/templates/m1-ci/gitleaks\.toml''',
+  '''plugins/project-standard/skills/setup/templates/m1-ci/gitleaks\.toml''',
 ]

@@ -35,9 +35,9 @@ A single argument: the Jira ticket URL or issue key.
 
 ## Preconditions (safety blockers — stop and report if any fail)
 
-1. **Repo root** — `package.json` `.name` is `@big-emotion/project-standard` (the scoped npm name; the skill prefix stays `project-standard`). If not, stop and tell the user to `cd` in.
+1. **Repo root** — `package.json` `.name` is `@big-emotion/agent-atelier` (the scoped npm name; the skill prefix stays `project-standard`). If not, stop and tell the user to `cd` in.
 2. **Atlassian MCP reachable** — `mcp__atlassian__getAccessibleAtlassianResources` returns at least one site. Resolve and keep `cloudId` (the Jira site id) for every subsequent Jira call. If it fails, stop — the Jira half of the workflow is impossible.
-3. **gh authenticated** — `gh auth status` succeeds for `big-emotion/project-standard`.
+3. **gh authenticated** — `gh auth status` succeeds for `big-emotion/agent-atelier`.
 4. **Base branch fetchable** — `git fetch origin` succeeds and `origin/<base_branch>` exists. Implementation runs in a dedicated worktree (Step 5), so the user's main checkout is never touched and need not be clean — but the worktree must be cut from a real remote base branch.
 5. **`ferry.config.json` present and parseable** — it is the single source of truth for the base/target branches + column names. If missing/invalid, stop.
 
@@ -65,13 +65,13 @@ Never substitute literals for these — if `ferry.config.json` changes, the skil
 ### Step 3 — Read & refine
 
 - Summarise the ticket's intent, scope, and acceptance criteria.
-- **Surface assumptions explicitly** in the refinement (per the core operating behaviors): any ambiguous requirement gets a stated assumption rather than a silent guess.
+- **Surface assumptions explicitly** in the refinement: any ambiguous requirement gets a stated assumption rather than a silent guess.
 
 Mandatory refinement rules for this repo (the templates are the product — these rules order sub-tasks and stop silent scope drift):
 
-- **Registry-first rule.** Trigger: the ticket adds, renames, or removes a `template placeholder` under `skills/setup/templates/`. Consequence: the `skills/setup/templates/params.json` registry change is the FIRST sub-task; every template sub-task depends on it (`npm run check:templates` fails on any placeholder not declared there). N/A when the ticket touches no template.
-- **Marker-preservation rule.** Trigger: any sub-task edits a template that carries adaptation comment blocks (the `<!-- PROJECT-… -->` markers in the m3-skills templates). Consequence: the sub-task wording must state that markers are deliberate product content — they are resolved at install time on target repos, never inside `skills/setup/templates/`. A sub-task whose acceptance criterion would remove or fill a marker in a template is re-scoped or rejected. N/A for non-template work.
-- **Spec/reference coupling rule.** Trigger: the ticket changes what a module (M1–M7) installs or how. Consequence: updating the module's section in `SPEC.md`/README and its `skills/setup/references/m<N>-*.md` file is an explicit sub-task in the same PR — doc drift between templates and references is a known audit finding. N/A for pure bug fixes that change no installed behavior.
+- **Registry-first rule.** Trigger: the ticket adds, renames, or removes a `template placeholder` under `plugins/project-standard/skills/setup/templates/`. Consequence: the `plugins/project-standard/skills/setup/templates/params.json` registry change is the FIRST sub-task; every template sub-task depends on it (`npm run check:templates` fails on any placeholder not declared there). N/A when the ticket touches no template.
+- **Marker-preservation rule.** Trigger: any sub-task edits a template that carries adaptation comment blocks (the `<!-- PROJECT-… -->` markers in the m3-skills templates). Consequence: the sub-task wording must state that markers are deliberate product content — they are resolved at install time on target repos, never inside `plugins/project-standard/skills/setup/templates/`. A sub-task whose acceptance criterion would remove or fill a marker in a template is re-scoped or rejected. N/A for non-template work.
+- **Spec/reference coupling rule.** Trigger: the ticket changes what a module (M1–M7) installs or how. Consequence: updating the module's section in `SPEC.md`/README and its `plugins/project-standard/skills/setup/references/m<N>-*.md` file is an explicit sub-task in the same PR — doc drift between templates and references is a known audit finding. N/A for pure bug fixes that change no installed behavior.
 - **Secrets-doctrine boundary rule.** Trigger: the ticket would add infra coordinates, example credentials, or provider identifiers anywhere. Consequence: this repo is public, so secret **values** and real infrastructure **coordinates** (hostnames, IPs, SSH ports, account handles, resource names, consumer-repo or client identities) are both forbidden everywhere; templates get `placeholders` instead and reference repos are named by role. Flag the ticket and keep sub-task wording scoped — never silently widen. N/A when no coordinates are involved.
 
 - Write the refined breakdown back to Jira as a comment on the ticket (`addCommentToJiraIssue`) so the refinement is visible to the team — concise: intent, assumptions, sub-task list with any dependency ordering called out.
@@ -99,38 +99,39 @@ All implementation happens in a **dedicated git worktree**, never in the user's 
 
 ### Step 6 — Implement (parallel sub-agents)
 
-Follow TDD and KISS (user `CLAUDE.md`): tests before code, simplest design that satisfies acceptance criteria, surgical scope — touch only what the ticket requires.
+Follow TDD and KISS: tests before code, simplest design that satisfies acceptance criteria, surgical scope — touch only what the ticket requires.
 
 Dependency-aware execution:
 
-1. **Respect the project's toolchain constraints.** This repo is a single npm toolchain: dependency-free ESM `.mjs` scripts on Node ≥ 20 (`node --test`, native modules only — do not add runtime dependencies). There is no build step. Template content under `skills/setup/templates/` keeps its `placeholder tokens` — never bake rendered values into a template. The rendered skills under `.claude/skills/project-standard-*/` are **outputs** of the m3 templates: when a change affects both, change the template first, then re-render the project copy, so the two never drift silently. Registry-first sub-tasks (params.json) run FIRST and alone.
+1. **Respect the project's toolchain constraints.** This repo is a single npm toolchain: dependency-free ESM `.mjs` scripts on Node ≥ 20 (`node --test`, native modules only — do not add runtime dependencies). There is no build step. Template content under `plugins/project-standard/skills/setup/templates/` keeps its `placeholder tokens` — never bake rendered values into a template. The rendered skills under `.claude/skills/project-standard-*/` are **outputs** of the m3 templates: when a change affects both, change the template first, then re-render the project copy, so the two never drift silently. Registry-first sub-tasks (params.json) run FIRST and alone.
 2. **Independent sub-tasks run in parallel** via the `Agent` tool (`general-purpose`, or `test-engineer` for test-heavy slices). Always parallelise when sub-tasks have no dependency between them — launch the independent sub-agents in a single message so they run concurrently. Each sub-agent gets a self-contained brief: the worktree path as its working directory, the sub-task summary, acceptance criteria, relevant file paths, the TDD + KISS + mobile-first constraints, and the instruction to write tests first. All sub-agents share the one worktree (they implement different sub-tasks of the same branch), so do not give them separate worktree isolation.
-3. **Mobile-first** (user `CLAUDE.md`): any UI work is designed and verified at 320–430 px first, then ≥768 px, then ≥1200 px.
+3. **Mobile-first**: any UI work is designed and verified at 320–430 px first, then ≥768 px, then ≥1200 px.
 
 ### Step 7 — Verify (safety blocker if it fails)
 
-Before any PR, the project's quality gates must pass on the branch. Run both, from the worktree root:
+Before any PR, the project's quality gates must pass on the branch. Run all three, from the worktree root:
 
 ```bash
 npm test
 npm run check:templates
+npm run check:manifests
 ```
 
-Both must exit 0. Run both even when the ticket seems to touch only one side — a template edit can break the checker's registry invariant, and a script edit can break the tests. These two commands are the repo's whole gate surface (they are exactly what `ci.yml`'s `checks` job runs, plus CI's manifest-parse step — if the ticket touched `.claude-plugin/*.json`, also confirm both manifests still parse with `node -e "JSON.parse(...)"`).
+All three must exit 0. Run them even when the ticket seems to touch only one side — a template edit can break the checker's registry invariant, a script edit can break the tests, and a manifest edit can break the marketplace/version lockstep. These commands are the repo's whole gate surface (exactly what `ci.yml`'s `checks` job runs).
 
 If a check fails, iterate on the implementation to fix the **root cause** (do not disable checks, do not `--no-verify`). If it is genuinely unrecoverable, **stop and report** — never open a broken PR. A broken PR on a shared branch is exactly the shared-state corruption full-auto must still refuse.
 
 ### Step 8 — Commit & push
 
 - Commit per sub-task (or logically grouped), Conventional Commits, message references the Jira key (e.g. `feat(scope): add retry on 5xx (KEY-123)`).
-- **Never add `Co-Authored-By` trailers** (user `CLAUDE.md`).
-- Commit messages, code comments, PR body — **English** (user `CLAUDE.md`), even when product copy is French.
+- **Never add `Co-Authored-By` trailers**.
+- Commit messages, code comments, PR body — **English**, even when product copy is French.
 - `git push -u origin <branch>`.
 
 ### Step 9 — Open the pull request
 
 ```bash
-gh pr create --repo big-emotion/project-standard \
+gh pr create --repo big-emotion/agent-atelier \
   --base <target_branch> --head <branch> \
   --title "<type>(<scope>): <summary> (KEY-123)" \
   --body "$(cat <<'EOF'
@@ -154,7 +155,7 @@ EOF
 
 Capture the PR URL from the command output.
 
-When the PR touches `skills/setup/templates/`, add a **Template impact** section to the body: which placeholders were added/removed (and the matching `params.json` registry change), and whether the rendered `.claude/skills/project-standard-*` copies were re-rendered or are unaffected.
+When the PR touches `plugins/project-standard/skills/setup/templates/`, add a **Template impact** section to the body: which placeholders were added/removed (and the matching `params.json` registry change), and whether the rendered `.claude/skills/project-standard-*` copies were re-rendered or are unaffected.
 
 ### Step 10 — Transition Jira to review + comment
 
@@ -176,4 +177,4 @@ End-of-turn summary (one or two sentences): the ticket key, the branch, the work
 
 ## Cleanup
 
-If any temporary files are created (e.g. `.playwright-mcp/` during browser verification), delete them immediately after use (user `CLAUDE.md`).
+If any temporary files are created (e.g. `.playwright-mcp/` during browser verification), delete them immediately after use.

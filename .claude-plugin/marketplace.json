@@ -3,19 +3,71 @@
   "owner": {
     "name": "Big Emotion"
   },
-  "description": "Big Emotion's Claude Code plugins.",
+  "description": "Agent Atelier — Big Emotion's workshop of Claude Code plugins: prompt utilities, the project-standard delivery pipeline, GitHub PR trains, frontend-fidelity tooling, and code-quality reviewers.",
   "plugins": [
     {
-      "name": "project-standard",
-      "source": "./",
-      "displayName": "Big Emotion Project Standard",
-      "description": "Installs and configures the Big Emotion project standard on any repo: CI quality gates, Husky hooks, the four project skills, Atlassian wiring, and Ferry.",
-      "version": "0.1.1",
+      "name": "prompt-utils",
+      "source": "./plugins/prompt-utils",
+      "displayName": "Prompt Utils",
+      "description": "Prompt-crafting utilities: /expertify rewrites a lay prompt with the precise professional role and domain terminology, /interview probes until your real intent is clear, /thought captures surprising model answers, /repo-scout breaks down any GitHub repo into reusable parts.",
+      "version": "0.2.0",
       "author": {
         "name": "Big Emotion"
       },
-      "homepage": "https://github.com/big-emotion/project-standard",
-      "repository": "https://github.com/big-emotion/project-standard",
+      "homepage": "https://github.com/big-emotion/agent-atelier",
+      "repository": "https://github.com/big-emotion/agent-atelier",
+      "license": "MIT"
+    },
+    {
+      "name": "project-standard",
+      "source": "./plugins/project-standard",
+      "displayName": "Big Emotion Project Standard",
+      "description": "Installs and configures the Big Emotion project standard on any repo: CI quality gates, Husky hooks, the four project skills, Atlassian wiring, and Ferry.",
+      "version": "0.2.0",
+      "author": {
+        "name": "Big Emotion"
+      },
+      "homepage": "https://github.com/big-emotion/agent-atelier",
+      "repository": "https://github.com/big-emotion/agent-atelier",
+      "license": "MIT"
+    },
+    {
+      "name": "pr-trains",
+      "source": "./plugins/pr-trains",
+      "displayName": "PR Trains",
+      "description": "Batch operators for GitHub queues: review-train reviews every open PR, fix-train applies requested changes, fix-ci-train turns red CI green, merge-train fixes and merges in dependency order, issue-train triages and builds one PR per actionable issue — all with parallel sub-agents and one grouped confirmation.",
+      "version": "0.2.0",
+      "author": {
+        "name": "Big Emotion"
+      },
+      "homepage": "https://github.com/big-emotion/agent-atelier",
+      "repository": "https://github.com/big-emotion/agent-atelier",
+      "license": "MIT"
+    },
+    {
+      "name": "frontend-fidelity",
+      "source": "./plugins/frontend-fidelity",
+      "displayName": "Frontend Fidelity",
+      "description": "Pixel-fidelity pipeline for frontend work: reverse-ui extracts a complete reproduction kit from any web app, blueprint turns it into a buildable frontend spec, validate-fidelity catches drift between spec, implementation, and the original.",
+      "version": "0.2.0",
+      "author": {
+        "name": "Big Emotion"
+      },
+      "homepage": "https://github.com/big-emotion/agent-atelier",
+      "repository": "https://github.com/big-emotion/agent-atelier",
+      "license": "MIT"
+    },
+    {
+      "name": "code-quality",
+      "source": "./plugins/code-quality",
+      "displayName": "Code Quality",
+      "description": "Code-quality reviewers: the ai-code-tells skill scans a diff for the tells of unreviewed AI-generated code, and the code-review agent runs a pre-push review of local changes (Claude Code agent + Codex CLI variant included).",
+      "version": "0.2.0",
+      "author": {
+        "name": "Big Emotion"
+      },
+      "homepage": "https://github.com/big-emotion/agent-atelier",
+      "repository": "https://github.com/big-emotion/agent-atelier",
       "license": "MIT"
     }
   ]

@@ -120,6 +120,7 @@ For the user:
 - **D7** (2026-07-19, **superseded by D9**) M7 coordinates model: **hybrid** — parameterized module + one internal coordinates file, zero secret values anywhere in the repo.
 - **D8** (2026-07-19) Azure is a **documented variant**, not a templated target; the OVH VPS pattern is the templated default. Mail scope: M365 SMTP + OVH DNS/domains.
 - **D9** (2026-07-21) The repo is **public**, superseding D7's hybrid model. No infrastructure coordinates live here in any form: the internal coordinates file is deleted, and the two reference implementations are named by role ("the website repo", "the support-agent repo") rather than by org/repo slug. Operators keep coordinates in a private location outside this repo and supply them at interview time. Rationale: D7's single-file isolation kept the blast radius small but still published real coordinates to anyone who cloned the repo, and a public repo makes the file's own signpost ("delete this if public") a pointer rather than a safeguard.
+- **D10** (2026-07-28) The repo becomes **Agent Atelier** (`big-emotion/agent-atelier`), a multi-plugin Claude Code marketplace of Big Emotion's first-party skills, commands, and agents grouped by domain. Supersedes D5's name; extends D6's distribution to five plugins with lockstep versions (`npm run check:manifests`). The project-standard plugin itself moves unchanged to `plugins/project-standard/`.
 
 ## 5. Out of scope
 

@@ -26,7 +26,7 @@ None. This skill takes no arguments. Everything it needs is in `docs/confluence-
 
 Verify all of the following before any Confluence write. If any fail, **do not modify anything** — report the blocker and exit.
 
-1. **In the repo root** — `package.json` `.name` is `@big-emotion/project-standard` (the scoped npm name; the skill prefix stays `project-standard`). If not, stop.
+1. **In the repo root** — `package.json` `.name` is `@big-emotion/agent-atelier` (the scoped npm name; the skill prefix stays `project-standard`). If not, stop.
 2. **Clean working tree** — `git status --porcelain` must be empty. If dirty, stop and ask the user to commit or stash (Phase 5 commits the sentinel + config on a dedicated branch and must not sweep up unrelated changes).
 3. **No prior bootstrap sentinel** — `docs/.confluence-bootstrap-complete` must NOT exist. If it does, read it, print its recorded timestamp + page IDs, and refuse. This skill is one-shot by contract.
 4. **Config present and parseable** — `docs/confluence-spec/config.json` must exist and contain non-null `cloudId`, `siteUrl`, `spaceKey`, `engineeringRootPageId` (this config lands with M4 wiring — until then, this precondition fails-fast by design). The four `*PageId` fields may be `null` (fresh config) or hold ids from a previous tree (deliberate re-init) — this skill overwrites them in Phase 4 either way. Do not hardcode these values inside this skill; always read them at runtime.
@@ -122,7 +122,7 @@ Persist the new page IDs so `/project-standard-spec` can find them. Use the Edit
 - `architecturePageId` = captured value
 - `obsoletePageId` = captured value
 
-Do **not** touch any other field. Preserve the file's existing indentation and field order (user `CLAUDE.md` JSON rule).
+Do **not** touch any other field. Preserve the file's existing indentation and field order — downstream skills edit this file surgically.
 
 ### Phase 5 — Lockout
 
@@ -151,7 +151,7 @@ Do **not** touch any other field. Preserve the file's existing indentation and f
    git commit -m "chore(confluence): bootstrap project-standard spec tree (one-shot)"
    ```
 
-   No `Co-Authored-By` trailer (user rule).
+   No `Co-Authored-By` trailer.
 
 4. **Do NOT push.** Print the final report:
 

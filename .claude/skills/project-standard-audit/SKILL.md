@@ -22,7 +22,7 @@ This skill **never** modifies source, never bumps versions, never tags, never pu
 
 ## Preconditions
 
-Run from the repo root (`package.json` with `"name": "@big-emotion/project-standard"` — the scoped npm name). If not, stop and tell the user to `cd` into the repo.
+Run from the repo root (`package.json` with `"name": "@big-emotion/agent-atelier"` — the scoped npm name). If not, stop and tell the user to `cd` into the repo.
 
 ## Inputs
 
@@ -41,14 +41,14 @@ Run in parallel via Bash:
 - `git tag --sort=-creatordate | head -5` — no tags yet is expected pre-launch; say so explicitly.
 - `jq '{name, version, private, packageManager, scripts}' package.json` — version, scripts, package manager.
 - `ls .github/workflows/` — workflow surface.
-- `ls skills/setup/templates/ skills/setup/references/` — the product's structural map (this repo has no `docs/` until the first audit writes it).
+- `ls plugins/project-standard/skills/setup/templates/ plugins/project-standard/skills/setup/references/` — the product's structural map (this repo has no `docs/` until the first audit writes it).
 
 Cheap structural checks for this repo's critical files:
 
-- `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` must parse as JSON.
-- `skills/setup/templates/params.json` must parse as JSON.
+- `.claude-plugin/marketplace.json` and every `plugins/*/.claude-plugin/plugin.json` must parse as JSON.
+- `plugins/project-standard/skills/setup/templates/params.json` must parse as JSON.
 - Every `scripts/*.mjs` passes `node --check`.
-- `skills/setup/SKILL.md` exists with valid frontmatter (the plugin's entry-point skill).
+- `plugins/project-standard/skills/setup/SKILL.md` exists with valid frontmatter (the plugin's entry-point skill).
 
 ### Step 2 — Read the existing audit (if present)
 
@@ -69,7 +69,7 @@ Read `docs/PRODUCTION-READINESS-AUDIT.md` if it exists. This skill **updates** t
 
 Long gates (skip with `--quick`):
 
-- Run the repo's full quality gates with its own commands — `npm ci` first (frozen-lockfile install; a stale `node_modules` after a merged PR is a known local false-negative), then `npm test` and `npm run check:templates`. There is **no production build** — this is a plugin repo with nothing to compile; do not invent a build gate.
+- Run the repo's full quality gates with its own commands — `npm ci` first (frozen-lockfile install; a stale `node_modules` after a merged PR is a known local false-negative), then `npm test`, `npm run check:templates`, and `npm run check:manifests`. There is **no production build** — this is a plugin repo with nothing to compile; do not invent a build gate.
 
 Always (cheap, read-only):
 
@@ -77,10 +77,10 @@ Always (cheap, read-only):
 - `git ls-files | grep -iE '\.env'` — must return only `.env.example` / `env.template` files (the m7 template ships one).
 - `git grep -nE '(sk_[A-Za-z0-9]{16,}|ghp_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|re_[A-Za-z0-9]{20,}|whsec_[A-Za-z0-9]{10,})'` — must return nothing on tracked files.
 - `git grep -nE "uses:\s+[^/\s]+/[^@\s]+@(main|master|v[0-9]+|latest)" .github/workflows/` — third-party Actions should be pinned by SHA.
-- Three-file version sync: `jq -r .version package.json`, `jq -r .version .claude-plugin/plugin.json`, `jq -r '.plugins[0].version' .claude-plugin/marketplace.json` — all three must be identical.
+- Version lockstep: `npm run check:manifests` — every `plugins/*/.claude-plugin/plugin.json` and every `.claude-plugin/marketplace.json` entry must match `package.json` `.version`.
 - `grep -rnE '\{\{' .claude/skills/project-standard-*/` — must return nothing: the rendered project skills are placeholder-free by contract.
-- `grep -rln 'PROJECT-''SPECIFIC' skills/setup/templates/` — must be **non-empty** (the pattern is split in two shell strings so this rendered skill itself stays clean of the marker string): the adaptation markers are product content inside the templates; their absence means someone resolved them in place, which is template corruption.
-- Reference completeness: for each `skills/setup/templates/m<N>-*` directory, a matching `skills/setup/references/m<N>-*.md` exists.
+- `grep -rln 'PROJECT-''SPECIFIC' plugins/project-standard/skills/setup/templates/` — must be **non-empty** (the pattern is split in two shell strings so this rendered skill itself stays clean of the marker string): the adaptation markers are product content inside the templates; their absence means someone resolved them in place, which is template corruption.
+- Reference completeness: for each `plugins/project-standard/skills/setup/templates/m<N>-*` directory, a matching `plugins/project-standard/skills/setup/references/m<N>-*.md` exists.
 - Coordinates sweep (public-repo rule): the tree must contain **no** infrastructure coordinates at all. Run shape-based greps — `git grep -nE '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b'` (public IPs), `git grep -niE 'vps-[a-z0-9]+\.|\.ovh\.net|azurewebsites|\.atlassian\.net'` (provider hostnames), and `git grep -nE '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}'` (real mailboxes). Every hit must be a documented placeholder, an `example.com`-class illustration, or a generic bind address — a real coordinate is a finding even though it is not a secret. Do not list real coordinates in this skill to grep for; that would reintroduce the leak it checks for.
 - `git grep -nE "TODO|FIXME|XXX|HACK" -- ':!node_modules' | wc -l` — code-debt heuristic.
 
@@ -90,13 +90,13 @@ Use this rubric (1–10 each, equal weight), adapted to a plugin/templates repo.
 
 | # | Domain | What to look for |
 | --- | --- | --- |
-| 1 | Template integrity | `npm run check:templates` green; every placeholder used under `skills/setup/templates/` is declared in `templates/params.json` (checker enforces) and declared-but-unused params are investigated, not ignored; the adaptation markers (the `<!-- PROJECT-… -->` comment blocks) are intact in the m3-skills templates — they are the product, never resolved in place; each module directory (m1-ci … m7-infra) present and internally consistent. |
-| 2 | CI gates + hooks | `ci.yml` runs both jobs — `gitleaks` (Docker image pinned by digest, `.gitleaks.toml` config) and `checks` (`npm test`, `npm run check:templates`, manifest JSON parse); concurrency group with cancel-in-progress; actions SHA-pinned; Husky live on this repo itself: `prepare: husky` script, `.husky/pre-commit` → lint-staged, `.husky/commit-msg` → commitlint, with `commitlint.config.mjs` + `lint-staged.config.mjs` at the root. |
-| 3 | Plugin packaging | `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` parse; plugin name `project-standard` consistent across both; versions in sync across `package.json` / `plugin.json` / `marketplace.json` `plugins[0]`; skills discoverable under `skills/` (`skills/setup/SKILL.md` frontmatter valid); README install commands match the marketplace and plugin names. |
-| 4 | Docs accuracy | SPEC.md and README module tables (M1–M7) match the actual tree under `skills/setup/templates/`; every module has its reference file under `skills/setup/references/`; every command a doc names exists in `package.json` scripts; English-docs rule respected. |
+| 1 | Template integrity | `npm run check:templates` green; every placeholder used under `plugins/project-standard/skills/setup/templates/` is declared in `templates/params.json` (checker enforces) and declared-but-unused params are investigated, not ignored; the adaptation markers (the `<!-- PROJECT-… -->` comment blocks) are intact in the m3-skills templates — they are the product, never resolved in place; each module directory (m1-ci … m7-infra) present and internally consistent. |
+| 2 | CI gates + hooks | `ci.yml` runs both jobs — `gitleaks` (Docker image pinned by digest, `.gitleaks.toml` config) and `checks` (`npm test`, `npm run check:templates`, `npm run check:manifests`); concurrency group with cancel-in-progress; actions SHA-pinned; Husky live on this repo itself: `prepare: husky` script, `.husky/pre-commit` → lint-staged, `.husky/commit-msg` → commitlint, with `commitlint.config.mjs` + `lint-staged.config.mjs` at the root. |
+| 3 | Plugin packaging | `.claude-plugin/marketplace.json` parses and lists every `plugins/*` directory; every `plugins/*/.claude-plugin/plugin.json` parses with `name` matching its directory; versions in lockstep with `package.json` (`npm run check:manifests`); skills discoverable (`plugins/project-standard/skills/setup/SKILL.md` frontmatter valid); README install commands match the marketplace and plugin names. |
+| 4 | Docs accuracy | SPEC.md and README module tables (M1–M7) match the actual tree under `plugins/project-standard/skills/setup/templates/`; every module has its reference file under `plugins/project-standard/skills/setup/references/`; every command a doc names exists in `package.json` scripts; English-docs rule respected. |
 | 5 | Secrets hygiene | `.gitleaks.toml` present (default rules + per-repo allowlist) and the gitleaks job wired in `ci.yml`; zero secret values anywhere (Step 3 pattern grep; full-history awareness); zero infrastructure coordinates anywhere (Step 3 coordinates sweep — this repo is public); `.gitignore` covers `.env` variants. |
 | 6 | Project-skills coverage | The rendered set `.claude/skills/project-standard-{release,audit,spec,ticket,bootstrap-confluence}/SKILL.md` is complete; each frontmatter `name:` equals its directory name; no unresolved placeholder and no unresolved adaptation marker in rendered skills (Step 3 greps); no shadowing collision in `~/.claude/skills` (a personal skill with the same name silently wins). |
-| 7 | Release readiness | `CHANGELOG.md` exists in Keep a Changelog format with an `[Unreleased]` section; three-file version sync (Step 3); annotated `v*` tags match released versions and each pushed tag has a GitHub Release (`gh release list` — this repo's releases are created by the release skill, no workflow); `/project-standard-release` preconditions are runnable (gh auth, `ci.yml` green on `main`). |
+| 7 | Release readiness | `CHANGELOG.md` exists in Keep a Changelog format with an `[Unreleased]` section; version lockstep (Step 3); annotated `v*` tags match released versions and each pushed tag has a GitHub Release (`gh release list` — this repo's releases are created by the release skill, no workflow); `/project-standard-release` preconditions are runnable (gh auth, `ci.yml` green on `main`). |
 
 Compute overall score = mean of the domain scores, rounded to one decimal.
 
@@ -133,7 +133,7 @@ Before reporting done:
 User-facing summary (printed at end):
 
 ```
-Big Emotion Project Standard Audit — <YYYY-MM-DD>
+Agent Atelier Audit — <YYYY-MM-DD>
 Score: X.X / 10 (target 8–9)
 
 1. Ready to install on real repos? <verdict + 1-line reason>

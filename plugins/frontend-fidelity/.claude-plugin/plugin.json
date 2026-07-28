@@ -1,0 +1,13 @@
+{
+  "name": "frontend-fidelity",
+  "displayName": "Frontend Fidelity",
+  "version": "0.2.0",
+  "description": "Pixel-fidelity pipeline for frontend work: reverse-ui extracts a complete reproduction kit from any web app, blueprint turns it into a buildable frontend spec, validate-fidelity catches drift between spec, implementation, and the original.",
+  "author": {
+    "name": "Big Emotion"
+  },
+  "homepage": "https://github.com/big-emotion/agent-atelier",
+  "repository": "https://github.com/big-emotion/agent-atelier",
+  "license": "MIT",
+  "keywords": ["frontend", "design-system", "reverse-engineering", "ui", "fidelity"]
+}
