@@ -1,18 +1,18 @@
 ---
 name: project-standard-release
-description: Prepare and ship a Big Emotion Project Standard release. Bumps the semver version in the three synced manifests (package.json, .claude-plugin/plugin.json, .claude-plugin/marketplace.json), updates CHANGELOG.md (Keep a Changelog format, creates it if missing), creates an annotated git tag on main, then asks for explicit confirmation before pushing. Tag push triggers no workflow — this repo has no deploy; the GitHub Release is created directly by this skill. Use when the user says "release project-standard", "cut a release", "bump version", "tag a new version", or invokes /project-standard-release.
+description: Prepare and ship an Agent Atelier release. Bumps the semver version in the lockstep manifests (package.json, every plugins/*/.claude-plugin/plugin.json, every .claude-plugin/marketplace.json plugins[] entry), updates CHANGELOG.md (Keep a Changelog format, creates it if missing), creates an annotated git tag on main, then asks for explicit confirmation before pushing. Tag push triggers no workflow — this repo has no deploy; the GitHub Release is created directly by this skill. Use when the user says "release project-standard", "cut a release", "bump version", "tag a new version", or invokes /project-standard-release.
 metadata:
   author: Big Emotion
   version: "1.0.0"
 ---
 
-# Big Emotion Project Standard Release
+# Agent Atelier Release
 
 Prepare a release locally (bump version, update CHANGELOG, create the commit and tag), then ask for explicit confirmation before pushing.
 
 This skill writes to the local repo first. It only runs `git push` after the user explicitly confirms. Without confirmation, the commit + tag stay local.
 
-**A release here has no deploy.** This repo is a Claude Code plugin: pushing the tag triggers **no workflow** — nothing builds, nothing ships to a server. Distribution is the git repo itself (`/plugin marketplace add big-emotion/project-standard`); the GitHub Release is created **directly by this skill** with `gh release create` after the push.
+**A release here has no deploy.** This repo is a Claude Code plugin marketplace: pushing the tag triggers **no workflow** — nothing builds, nothing ships to a server. Distribution is the git repo itself (`/plugin marketplace add big-emotion/agent-atelier`); the GitHub Release is created **directly by this skill** with `gh release create` after the push.
 
 ## When to Activate
 
@@ -23,20 +23,20 @@ This skill writes to the local repo first. It only runs `git push` after the use
 
 Verify all of the following before any write. If any fail, **do not modify anything** — report the blocker and exit.
 
-1. **In the repo root** — `package.json` has `"name": "@big-emotion/project-standard"` (the scoped npm name; the skill prefix stays `project-standard`). If not, stop and tell the user to `cd` to the right directory.
+1. **In the repo root** — `package.json` has `"name": "@big-emotion/agent-atelier"` (the scoped npm name; the skill prefix stays `project-standard`). If not, stop and tell the user to `cd` to the right directory.
 2. **Clean working tree** — `git status --porcelain` must be empty. If dirty, stop and ask the user to commit or stash.
 3. **On `main` branch** — `git branch --show-current` must return `main`. If not, stop. This is a single-branch repo: `main` serves as both integration and release branch (deliberate M6 adaptation for a tooling/plugin repo — there is no `develop`).
 4. **Up to date with `origin/main`** — run `git fetch origin` then `git rev-list --count main..origin/main`. If > 0, stop and tell the user to `git pull`.
 5. **CI green on HEAD** — run:
    ```bash
    HEAD_SHA=$(git rev-parse HEAD)
-   gh run list --repo big-emotion/project-standard \
+   gh run list --repo big-emotion/agent-atelier \
      --commit "$HEAD_SHA" --workflow ci.yml \
      --limit 1 --json conclusion,status,url
    ```
    The latest run must have `conclusion: "success"` (`ci.yml` runs on pushes to `main`, so HEAD should have a run). If no run exists for HEAD, or the conclusion is not `success`, stop and provide the run URL so the user can investigate.
-6. **Local gates green** — `npm test` and `npm run check:templates` must both exit 0. This is the repo's whole quality surface (unit tests on the checker + placeholder-registry validation); a release with a red checker would ship broken templates.
-7. **Manifest versions in sync** — the three version carriers must already agree before the bump: `package.json` `.version`, `.claude-plugin/plugin.json` `.version`, and `.claude-plugin/marketplace.json` `.plugins[0].version`. If they disagree, stop and report the drift — fix it as a bug first; do not paper over it inside a release.
+6. **Local gates green** — `npm test`, `npm run check:templates`, and `npm run check:manifests` must all exit 0. This is the repo's whole quality surface (unit tests on the checkers, placeholder-registry validation, marketplace/version lockstep); a release with a red checker would ship broken templates or a drifted marketplace.
+7. **Manifest versions in sync** — every version carrier must already agree before the bump: `package.json` `.version`, every `plugins/*/.claude-plugin/plugin.json` `.version`, and every `.claude-plugin/marketplace.json` `.plugins[]` entry (`npm run check:manifests` verifies exactly this). If they disagree, stop and report the drift — fix it as a bug first; do not paper over it inside a release.
 
 ## Inputs
 
@@ -59,7 +59,7 @@ Show the proposal and **ask the user to confirm or override** before proceeding.
 
 ### Step 1 — Determine current and target versions
 
-- Read current version from the **root** `package.json` (`.version`) — the source of truth the two plugin manifests mirror (precondition 7 already verified they agree).
+- Read current version from the **root** `package.json` (`.version`) — the source of truth every plugin manifest and marketplace entry mirrors (precondition 7 already verified they agree).
 - Determine `previous_tag` = `git describe --tags --abbrev=0 2>/dev/null` (empty if no tag yet).
 - Compute `next_version` from the bump level.
 - Validate: `next_version` must be strictly greater than `current_version` (semver comparison). If not, stop and ask the user for an explicit higher version.
@@ -107,27 +107,27 @@ Then:
 - Append the grouped commits from Step 2 under the appropriate subsections (deduplicate; skip sections with no entries).
 - Keep an empty `[Unreleased]` section at the top for the next cycle.
 - Maintain the link references at the bottom of the file:
-  - `[Unreleased]` → `https://github.com/big-emotion/project-standard/compare/v<next_version>...HEAD`
-  - Add `[<next_version>]` → `https://github.com/big-emotion/project-standard/releases/tag/v<next_version>` (first release) or `.../compare/v<previous>...v<next_version>` (subsequent releases).
+  - `[Unreleased]` → `https://github.com/big-emotion/agent-atelier/compare/v<next_version>...HEAD`
+  - Add `[<next_version>]` → `https://github.com/big-emotion/agent-atelier/releases/tag/v<next_version>` (first release) or `.../compare/v<previous>...v<next_version>` (subsequent releases).
 
 Use today's date (`date -u +%Y-%m-%d`) for the release date.
 
-### Step 4 — Bump the version in the three synced manifests
+### Step 4 — Bump the version in the lockstep manifests
 
-Set `<next_version>` in **all three** files — they must never diverge (the plugin marketplace reads the manifests, npm tooling reads `package.json`):
+Set `<next_version>` everywhere it lives — the carriers must never diverge (the plugin marketplace reads the manifests, npm tooling reads `package.json`):
 
 1. `package.json` — `.version`
-2. `.claude-plugin/plugin.json` — `.version`
-3. `.claude-plugin/marketplace.json` — `.plugins[0].version`
+2. every `plugins/*/.claude-plugin/plugin.json` — `.version`
+3. every `.claude-plugin/marketplace.json` `.plugins[]` entry — `.version`
 
-Use the Edit tool for each (targeted field update — do not reformat the files, preserve indentation and field order).
+Use the Edit tool for each (targeted field update — do not reformat the files, preserve indentation and field order). Then refresh the lockfile (`npm install --package-lock-only`) and run `npm run check:manifests` — it must pass before committing.
 
 ### Step 5 — Commit and tag (local only)
 
-Stage exactly the four files changed:
+Stage exactly the files changed:
 
 ```bash
-git add CHANGELOG.md package.json .claude-plugin/plugin.json .claude-plugin/marketplace.json
+git add CHANGELOG.md package.json package-lock.json .claude-plugin/marketplace.json plugins/*/.claude-plugin/plugin.json
 ```
 
 (Do not `git add -A` — do not pick up unrelated dirty paths.)
@@ -145,7 +145,7 @@ One-line subject only. No body unless there are breaking changes — then add a 
 Then create an annotated tag:
 
 ```bash
-git tag -a v<next_version> -m "Big Emotion Project Standard v<next_version>"
+git tag -a v<next_version> -m "Agent Atelier v<next_version>"
 ```
 
 ### Step 6 — Report and ask for push confirmation
@@ -153,13 +153,13 @@ git tag -a v<next_version> -m "Big Emotion Project Standard v<next_version>"
 Print a summary:
 
 ```
-project-standard v<next_version> prepared locally.
+agent-atelier v<next_version> prepared locally.
 
 Files changed:
-  - package.json                      (version: <current_version> → <next_version>)
-  - .claude-plugin/plugin.json        (version: <current_version> → <next_version>)
-  - .claude-plugin/marketplace.json   (plugins[0].version: <current_version> → <next_version>)
-  - CHANGELOG.md                      (new section [<next_version>] - <today>)
+  - package.json + package-lock.json        (version: <current_version> → <next_version>)
+  - plugins/*/.claude-plugin/plugin.json    (version: <current_version> → <next_version>, every plugin)
+  - .claude-plugin/marketplace.json         (every plugins[] entry: <current_version> → <next_version>)
+  - CHANGELOG.md                            (new section [<next_version>] - <today>)
 
 Commit:  <short-sha>  release: v<next_version>
 Tag:     v<next_version> (annotated, local only)
@@ -192,7 +192,7 @@ git push origin v<next_version>
 After both pushes succeed, create the GitHub Release directly (no workflow does this — it is this skill's job):
 
 ```bash
-gh release create v<next_version> --repo big-emotion/project-standard --generate-notes
+gh release create v<next_version> --repo big-emotion/agent-atelier --generate-notes
 ```
 
 Then print:
@@ -204,7 +204,7 @@ Pushed.
 
 No workflow was triggered by the tag push (this repo has no deploy).
 GitHub Release created:
-  https://github.com/big-emotion/project-standard/releases/tag/v<next_version>
+  https://github.com/big-emotion/agent-atelier/releases/tag/v<next_version>
 
 Plugin consumers pick the new version up from the repo via the marketplace.
 ```
@@ -213,7 +213,7 @@ If `gh release create` fails after the pushes succeeded, report it and instruct 
 
 ### Step 8 — Verification checklist
 
-- [ ] `package.json`, `.claude-plugin/plugin.json`, and `.claude-plugin/marketplace.json` (`plugins[0].version`) all carry the new version, matching the tag.
+- [ ] `package.json`, every `plugins/*/.claude-plugin/plugin.json`, and every `.claude-plugin/marketplace.json` entry carry the new version, matching the tag (`npm run check:manifests` green).
 - [ ] `CHANGELOG.md` has a `[<next_version>]` section dated today.
 - [ ] Exactly one commit was created. Exactly one annotated tag was created.
 - [ ] If user confirmed: both `main` and `v<next_version>` are pushed to origin, and the GitHub Release exists.
@@ -228,8 +228,8 @@ If `gh release create` fails after the pushes succeeded, report it and instruct 
 | Not on `main` branch | Stop. Report current branch. |
 | Behind `origin/main` | Stop. Tell user to `git pull`. |
 | CI not green on HEAD | Stop. Print the run URL for investigation. |
-| `npm test` or `npm run check:templates` fails | Stop. A red checker means broken templates would ship. |
-| The three manifest versions disagree before the bump | Stop. Report the drift; it is a bug to fix, not to release over. |
+| `npm test`, `npm run check:templates`, or `npm run check:manifests` fails | Stop. A red checker means broken templates or a drifted marketplace would ship. |
+| The manifest versions disagree before the bump | Stop. Report the drift; it is a bug to fix, not to release over. |
 | Target version ≤ current version | Stop. Ask for an explicit higher version. |
 | `git push origin main` fails | Stop. Do not push the tag. |
 | `gh release create` fails after the pushes | Report. Instruct manual re-run of that one command; never delete or re-push the tag. |
@@ -238,6 +238,6 @@ If `gh release create` fails after the pushes succeeded, report it and instruct 
 
 - npm publish (package is `private: true`).
 - Any deploy — no deploy workflow exists; distribution is the git tag + the Claude Code plugin marketplace reading this repo.
-- Bumping any manifest other than the three version carriers listed in Step 4.
+- Bumping any manifest other than the version carriers listed in Step 4.
 - Audit/scoring of release readiness (preconditions above are sufficient; run `/project-standard-audit` separately).
 - Pushing without explicit user confirmation in Step 6.

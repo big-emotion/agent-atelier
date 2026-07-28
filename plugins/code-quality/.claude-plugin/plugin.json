@@ -1,0 +1,13 @@
+{
+  "name": "code-quality",
+  "displayName": "Code Quality",
+  "version": "0.2.0",
+  "description": "Code-quality reviewers: the ai-code-tells skill scans a diff for the tells of unreviewed AI-generated code, and the code-review agent runs a pre-push review of local changes (Claude Code agent + Codex CLI variant included).",
+  "author": {
+    "name": "Big Emotion"
+  },
+  "homepage": "https://github.com/big-emotion/agent-atelier",
+  "repository": "https://github.com/big-emotion/agent-atelier",
+  "license": "MIT",
+  "keywords": ["code-review", "quality", "ai-generated-code", "diff"]
+}

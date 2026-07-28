@@ -11,7 +11,15 @@ import { fileURLToPath } from "node:url";
 
 const templatesRoot =
   process.argv[2] ??
-  join(dirname(fileURLToPath(import.meta.url)), "..", "skills", "setup", "templates");
+  join(
+    dirname(fileURLToPath(import.meta.url)),
+    "..",
+    "plugins",
+    "project-standard",
+    "skills",
+    "setup",
+    "templates",
+  );
 
 const params = JSON.parse(readFileSync(join(templatesRoot, "params.json"), "utf8"));
 const declared = new Set(Object.keys(params).filter((k) => k !== "$comment"));

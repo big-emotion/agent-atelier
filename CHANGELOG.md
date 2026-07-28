@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-07-28
+
+### Changed
+
+- The repo becomes **Agent Atelier** (`big-emotion/agent-atelier`, renamed from `project-standard`): a multi-plugin Claude Code marketplace curating Big Emotion's first-party skills, commands, and agents, grouped by domain. The `big-emotion` marketplace now lists five plugins; installs of the existing plugin (`project-standard@big-emotion`) keep working — GitHub redirects the old repo URL.
+- The project-standard plugin moved unchanged from the repo root to `plugins/project-standard/` (its internal paths resolve via `${CLAUDE_PLUGIN_ROOT}` and needed no edits).
+- CI's inline manifest JSON-parse check is replaced by the `check:manifests` gate.
+
+### Added
+
+- **prompt-utils** plugin: `expertify` (rewrite a lay prompt with the precise professional role and the field's terminology), `interview` (interview the user until their real intent is clear), `thought` (capture surprising model answers as durable notes), `repo-scout` (break down any GitHub repo into reusable parts).
+- **pr-trains** plugin: `review-train`, `fix-train`, `fix-ci-train`, `merge-train`, `issue-train` — batch operators over GitHub PR/issue queues with parallel sub-agents and one grouped confirmation.
+- **frontend-fidelity** plugin: `reverse-ui`, `blueprint`, `validate-fidelity` — extract a pixel-perfect reproduction kit from any web app, spec it, and catch fidelity drift.
+- **code-quality** plugin: the `ai-code-tells` skill (scan a diff for the tells of unreviewed AI-generated code) and the `code-review` pre-push agent, including its Codex CLI variant (`codex/code-review.toml`).
+- `scripts/check-manifests.mjs` (+ tests): CI gate enforcing that every plugin is listed in the marketplace, names match directories, and all versions move in lockstep with `package.json`.
+- `CONTRIBUTING.md`.
+
 ## [0.1.1] - 2026-07-21
 
 ### Added
@@ -39,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - First production-readiness audit (`docs/PRODUCTION-READINESS-AUDIT.md`): 8.1/10.
 - Real-world validation of M1+M2 on a live consumer repo: green PR, hooks active, one pre-existing lint bug caught.
 
-[Unreleased]: https://github.com/big-emotion/project-standard/compare/v0.1.1...HEAD
-[0.1.1]: https://github.com/big-emotion/project-standard/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/big-emotion/project-standard/releases/tag/v0.1.0
+[Unreleased]: https://github.com/big-emotion/agent-atelier/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/big-emotion/agent-atelier/compare/v0.1.1...v0.2.0
+[0.1.1]: https://github.com/big-emotion/agent-atelier/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/big-emotion/agent-atelier/releases/tag/v0.1.0

@@ -1,9 +1,9 @@
 {
-  "name": "@big-emotion/project-standard",
-  "version": "0.1.1",
+  "name": "@big-emotion/agent-atelier",
+  "version": "0.2.0",
   "private": true,
   "license": "MIT",
-  "description": "The Big Emotion project standard: quality gates, hooks, project skills, Atlassian wiring, Ferry — packaged as a Claude Code plugin that installs and configures it all.",
+  "description": "Agent Atelier: Big Emotion's curated, open-source collection of Claude Code skills, commands, and agents — packaged as a multi-plugin marketplace.",
   "type": "module",
   "engines": {
     "node": ">=20"
@@ -11,6 +11,7 @@
   "scripts": {
     "test": "node --test scripts/*.test.mjs",
     "check:templates": "node scripts/check-templates.mjs",
+    "check:manifests": "node scripts/check-manifests.mjs",
     "prepare": "husky"
   },
   "devDependencies": {
