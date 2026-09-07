@@ -79,6 +79,17 @@ The `code-review` agent ships a Codex CLI variant.
 
 Use cases (prompt → result): [agents/](plugins/code-quality/agents/README.md) · [codex/](plugins/code-quality/codex/README.md) · [skills/](plugins/code-quality/skills/README.md)
 
+### [agent-comms](plugins/agent-comms/README.md) — publish video and social content that actually holds
+
+Four skills that hand each other a written artefact, not a conversation: script → file → measurement → next subject.
+
+- [`attention-architect`](plugins/agent-comms/skills/attention-architect/SKILL.md) — Turns a subject into an approvable narrated script and names the mechanism behind every beat, with the line it must not cross.
+- [`video-director`](plugins/agent-comms/skills/video-director/SKILL.md) — Everything between an approved script and a publishable file: the format spec, the sourcing discipline, the traps, the packaging.
+- [`audience-audit`](plugins/agent-comms/skills/audience-audit/SKILL.md) — Crosses analytics with the site's own URL inventory and gives every visited page one verdict, in one dated report.
+- [`content-strategist`](plugins/agent-comms/skills/content-strategist/SKILL.md) — Decides what ships next and where, with the comparable's numbers attached — never a menu handed back.
+
+Use cases (prompt → result): [skills/](plugins/agent-comms/skills/README.md)
+
 ## Development
 
 `npm test` · `npm run check:templates` · `npm run check:manifests` — all enforced in CI alongside a gitleaks secret scan. See [CONTRIBUTING.md](CONTRIBUTING.md).
