@@ -1,0 +1,13 @@
+{
+  "name": "agent-comms",
+  "displayName": "Agent Comms",
+  "version": "0.2.0",
+  "description": "Communication skills for short-form video and social publishing: attention-architect writes the script and names the mechanism behind every beat, video-director carries the production decisions and the traps that have already cost time, audience-audit measures what the audience actually does, content-strategist decides what to publish next and where.",
+  "author": {
+    "name": "Big Emotion"
+  },
+  "homepage": "https://github.com/big-emotion/agent-atelier",
+  "repository": "https://github.com/big-emotion/agent-atelier",
+  "license": "MIT",
+  "keywords": ["communication", "video", "social", "audience", "content-strategy", "attention"]
+}

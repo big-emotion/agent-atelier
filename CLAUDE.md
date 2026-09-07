@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-**Agent Atelier** — a multi-plugin **Claude Code marketplace**, not an application. It curates Big Emotion's first-party skills, commands, and agents into five domain plugins under `plugins/`, distributed as the git repo itself (`/plugin marketplace add big-emotion/agent-atelier`; the marketplace name stays `big-emotion`, so installs are `<plugin>@big-emotion`). There is no build, no runtime, no deploy.
+**Agent Atelier** — a multi-plugin **Claude Code marketplace**, not an application. It curates Big Emotion's first-party skills, commands, and agents into six domain plugins under `plugins/`, distributed as the git repo itself (`/plugin marketplace add big-emotion/agent-atelier`; the marketplace name stays `big-emotion`, so installs are `<plugin>@big-emotion`). There is no build, no runtime, no deploy.
 
 Almost everything here is Markdown. The only executable code is the two CI gates — `scripts/check-templates.mjs` and `scripts/check-manifests.mjs` — and their tests.
 
@@ -17,6 +17,7 @@ Almost everything here is Markdown. The only executable code is the two CI gates
 | `plugins/pr-trains` | skills `review-train`, `fix-train`, `fix-ci-train`, `merge-train`, `issue-train` |
 | `plugins/frontend-fidelity` | skills `reverse-ui`, `blueprint`, `validate-fidelity` |
 | `plugins/code-quality` | skill `ai-code-tells`, agent `code-review` (+ `codex/code-review.toml`, the Codex CLI variant) |
+| `plugins/agent-comms` | skills `attention-architect`, `video-director`, `audience-audit`, `content-strategist` |
 
 Every plugin is generic by construction: no client names, no infrastructure coordinates, no secrets. New material must arrive already de-branded.
 

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **agent-comms** plugin: `attention-architect` (turn a subject into an approvable narrated script and name the mechanism behind every beat, plus a pattern ledger with an intake protocol), `video-director` (the span between an approved script and a publishable file — format spec, sourcing discipline, the traps that have already cost a session, packaging), `audience-audit` (cross privacy analytics with the site's own URL inventory into one dated report of per-page verdicts), `content-strategist` (decide what ships next and where, with the comparable's numbers attached). The attention doctrine is derived from measured productions rather than from a marketing manual; the plugin carries no SEO skill and says so.
+
 ## [0.2.0] - 2026-07-28
 
 ### Changed
