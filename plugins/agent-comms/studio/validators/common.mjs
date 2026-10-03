@@ -1,0 +1,71 @@
+// Shared checks for the deliverable validators. Every validator returns an
+// array of plain-language problems; an empty array means the file is accepted.
+// The same functions run on an API run's outputs and on a guide-mode paste, so
+// neither mode can ship something the other would refuse.
+
+// Fixed by the studio contract: the portal looks this heading up verbatim,
+// whatever the language of the project.
+export const CHOICES_HEADING = "## Choix faits pour toi";
+
+export const wordCount = (text) => text.trim().split(/\s+/).filter(Boolean).length;
+
+// A sentence ends at ., !, ? or an ellipsis followed by a space or the end.
+// Decimal numbers and abbreviations without a following space stay whole.
+export const splitSentences = (text) =>
+  text
+    .split(/(?<=[.!?…])\s+/)
+    .map((sentence) => sentence.trim())
+    .filter(Boolean);
+
+export const isHttpUrl = (value) => {
+  if (typeof value !== "string") return false;
+  try {
+    const { protocol } = new URL(value);
+    return protocol === "http:" || protocol === "https:";
+  } catch {
+    return false;
+  }
+};
+
+export const isNonEmptyString = (value) => typeof value === "string" && value.trim() !== "";
+
+export function parseJson(text, label) {
+  try {
+    return { value: JSON.parse(text) };
+  } catch (error) {
+    return { problems: [`${label} is not valid JSON: ${error.message}`] };
+  }
+}
+
+const headingLine = (heading) => new RegExp(`^${heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "m");
+
+export const hasHeading = (markdown, heading) => headingLine(heading).test(markdown);
+
+// Body of a section, up to the next heading of the same or a higher level.
+export function sectionBody(markdown, heading) {
+  const match = headingLine(heading).exec(markdown);
+  if (!match) return null;
+  const level = heading.match(/^#+/)[0].length;
+  const rest = markdown.slice(match.index + match[0].length);
+  const next = new RegExp(`^#{1,${level}}\\s`, "m").exec(rest);
+  return (next ? rest.slice(0, next.index) : rest).trim();
+}
+
+export function requireHeadings(markdown, headings) {
+  return headings
+    .filter((heading) => !hasHeading(markdown, heading))
+    .map((heading) => `Missing section "${heading}".`);
+}
+
+// One bullet per choice, each with a reason after a dash: "- <choice> — <why>".
+export function validateChoicesSection(markdown) {
+  const body = sectionBody(markdown, CHOICES_HEADING);
+  if (body === null) return [`Missing section "${CHOICES_HEADING}".`];
+  const bullets = body.split("\n").filter((line) => /^\s*[-*]\s+/.test(line));
+  if (bullets.length === 0) return [`"${CHOICES_HEADING}" must list at least one choice.`];
+  return bullets
+    .filter((line) => !/\s[—–-]\s+\S.{2,}/.test(line))
+    .map((line) => `A choice has no reason ("<choice> — <reason>"): ${line.trim().slice(0, 60)}`);
+}
+
+export const INTERNAL_NOTE = /\b(TODO|TBD|FIXME|to confirm|to be confirmed|à confirmer|à nommer|à compléter)\b|\*\*/i;
