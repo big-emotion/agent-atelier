@@ -120,6 +120,23 @@ without explicit approval for that specific post.** Draft the copy, show it, sto
 Automated video upload fails on some platforms in an agent environment — the file
 registers and the composer never advances — so those are manual regardless.
 
+## Running inside a content studio
+
+When the working folder has `project/studio.md`, that contract wins over the steps
+above: never ask, never block, and write exactly two files into `outputs/`.
+
+- `strategy.md`: the dated plan. Title `# Content strategy — YYYY-MM-DD`, the line
+  `Audit report: YYYY-MM-DD` (the report in `inputs/audience-report.md`, no more than
+  30 days older than the strategy), `## Plan` (directives with their reasons),
+  `## Not collected this run` (empty is never zero) and `## Choix faits pour toi`.
+- `ideas.json`: the same plan as data. Each idea has `title`, `seed` (what the idea
+  step can start from), `channels`, `reason` and `comparable`, which is either the
+  figures (`collected: true`, `summary`, `numbers`) or the admission that none were
+  collected (`collected: false`, `note`). A subject never leaves without one.
+
+Platform numbers are not collected from a browser in a studio run: use what is in
+`inputs/`.
+
 ## Boundaries
 
 - The hook, the script, why a piece holds → `attention-architect`.

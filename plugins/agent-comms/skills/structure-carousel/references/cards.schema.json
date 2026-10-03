@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "cards.json",
+  "description": "The deck read by the render engine. Field names are the engine's own (French) so a deck renders unchanged; the descriptions are in English. The image block differs from the engine's raw form: it points at images.json, and the server fills the file, credit and licence from Wikimedia Commons before rendering.",
+  "type": "object",
+  "required": ["campagne", "cartes"],
+  "properties": {
+    "campagne": { "type": "string", "description": "A short slug for the piece." },
+    "pilier": { "type": "string", "description": "Optional content series or theme label from the project profile." },
+    "accent": { "type": "string", "description": "Optional accent token name from the project's brand kit. Checked at render time." },
+    "fond": { "type": "string", "description": "Optional ground token name from the project's brand kit. Checked at render time." },
+    "licence_sortie": { "type": "string", "description": "Ignored: the deck licence is computed from the images, never copied." },
+    "cartes": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 9,
+      "items": {
+        "type": "object",
+        "required": ["rang", "role", "titre", "image"],
+        "properties": {
+          "rang": { "type": "integer", "minimum": 1, "description": "Position in the deck, 1..n with no gap." },
+          "role": { "type": "string", "description": "`ouverture` for the cover (first card only), `bascule` for the closing card, `contenu` for the rest." },
+          "titre": { "type": "string", "description": "Cover: eight words at most. Every sentence: twenty words at most." },
+          "chiffre": { "type": "boolean", "description": "True when `titre` is a single figure or word set large; then it is not a sentence." },
+          "precision": { "type": "string", "description": "A short line under the title." },
+          "punchline": { "type": "string" },
+          "corps": { "type": "string", "description": "Body text. Subject first, reference after." },
+          "source": { "type": "string", "description": "Short, identifiable source printed on the card. Required on every card after the cover except a closing card that only invites." },
+          "image": {
+            "type": "object",
+            "required": ["id", "identite"],
+            "properties": {
+              "id": { "type": "string", "description": "An id from images.json." },
+              "identite": { "type": "string", "description": "One sentence on what the image shows, without naming its author or licence." },
+              "cadrage": { "type": "string", "description": "Optional crop focus, for example \"50% 40%\"." }
+            }
+          },
+          "paires": {
+            "oneOf": [
+              { "type": "null" },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 4,
+                "items": {
+                  "type": "object",
+                  "required": ["terme", "glose"],
+                  "properties": { "terme": { "type": "string" }, "glose": { "type": "string" } }
+                }
+              }
+            ]
+          },
+          "pivot": { "type": ["string", "null"], "description": "The one word or phrase set in the accent colour; never deduced by the engine." },
+          "coupe": { "type": ["array", "null"], "description": "Forced title line breaks; null unless the break carries meaning." },
+          "disposition": { "enum": ["auto", "A", "B", "C"], "description": "Layout choice; `auto` unless there is a written reason." }
+        }
+      }
+    }
+  }
+}

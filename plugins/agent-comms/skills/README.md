@@ -97,3 +97,25 @@ already has the audience a new page would have to earn.
 Not collected this session: one platform stalled on bot detection.
 Recorded empty, NOT zero.
 ```
+
+## [`idea`](idea/SKILL.md)
+
+Turns a seed into a subject report: the question, the angle, a one-sentence promise, what the piece will not say, its sources and its reservations. A hook the sources cannot pay off is refused as bait.
+
+```
+/agent-comms:idea Why does the Ridge Line route close every October?
+```
+
+Writes `idea.md` and `idea.json`. Inside a content studio it never asks and never blocks: it picks the proposal the evidence best supports and lists every decision under `## Choix faits pour toi`.
+
+## [`structure-carousel`](structure-carousel/SKILL.md)
+
+Turns an approved subject report into a sourced carousel: card copy, a caption per network, sources, Wikimedia Commons image titles and the exact quotes behind each claim.
+
+```
+/agent-comms:structure-carousel inputs/idea.json
+```
+
+Writes `cards.json`, `captions.md`, `sources.md`, `images.json` and `citations.json`. Cover title of eight words or fewer, sentences of twenty words at most, subject before reference, a source on every claim. It never reads a licence: the server does, from Commons.
+
+Both packs, and the studio contract the other two skills now follow, are described in the [studio kit](../studio/README.md).

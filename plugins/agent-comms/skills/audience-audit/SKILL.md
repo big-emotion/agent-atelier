@@ -171,6 +171,18 @@ Numbered, each one sentence, each tied to a number above.
 The handoff section is mandatory and must be actionable on its own. A finding no
 downstream skill can act on belongs in Findings, not in a handoff.
 
+## Running inside a content studio
+
+When the working folder has `project/studio.md`, that contract wins over the steps
+above: never ask, never block, and write exactly one file,
+`outputs/audience-report.md`, with the same dated title, sections and handoff as
+Step 5, plus the section `## Choix faits pour toi` (one bullet per decision, each
+with a reason after a dash). The analytics come from `inputs/`, never from a live
+endpoint. With none supplied, every figure is recorded as unmeasured and the
+handoff says the first action is to supply data. The studio validates the file with
+the same checks whichever way the step ran (API run or a prompt the user ran in
+their own session).
+
 ## Boundaries
 
 This skill measures and classifies. It does not fix, and it does not decide what
