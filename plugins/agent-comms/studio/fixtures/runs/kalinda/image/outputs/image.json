@@ -1,0 +1,8 @@
+{
+  "campagne": "pagne-indigo-image",
+  "titre": "Laver un pagne indigo sans le ternir",
+  "texte": "Lave-le à l'eau froide. Fais-le sécher à l'ombre.",
+  "source": "Guide d'entretien des textiles, section 1",
+  "alt": "Un pagne indigo plié sur une table en bois",
+  "image": { "id": "img-1", "identite": "Un tissu bleu indigo plié sur une table en bois" }
+}

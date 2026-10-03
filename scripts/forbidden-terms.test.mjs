@@ -37,6 +37,14 @@ test("the reference fjellvik outputs carry no Kalinda term", () => {
   assert.equal(result.status, 0, result.stderr);
 });
 
+test("every run fixture of each profile is clean against the other profile", () => {
+  for (const profile of ["fjellvik", "kalinda"]) {
+    const dir = join(here, "../plugins/agent-comms/studio/fixtures/runs", profile);
+    const result = spawnSync("node", [cli, "--profile", profile, dir], { encoding: "utf8" });
+    assert.equal(result.status, 0, `${profile}: ${result.stderr}`);
+  }
+});
+
 test("the CLI fails and names file and line when a foreign term appears", () => {
   const dir = mkdtempSync(join(tmpdir(), "forbidden-terms-"));
   try {

@@ -1,6 +1,6 @@
 ---
 name: idea
-description: Turns a rough idea, a theme or an audience finding into a subject report a writer can build cards from without asking another question — the question, the angle, a one-sentence promise, what the piece will not say, its sources and its reservations. First step of the idea, structure, produce chain. Also carries the narrative design stages (frame, research, propose, choose, develop) for a carousel. Never writes a card, picks an image or opens a template. Use for "j'ai une idée de…", "on pourrait parler de…", "trouve-moi un sujet", "quels récits possibles pour ce sujet", or /idea.
+description: Turns a rough idea, a theme or an audience finding into a subject report a writer can build cards from without asking another question — the question, the angle, a one-sentence promise, what the piece will not say, its sources and its reservations. First step of the idea, structure, produce chain. Also carries the narrative design stages (frame, research, propose, choose, develop) for a carousel, a reel or a single image. Never writes a card, picks an image or opens a template. Use for "j'ai une idée de…", "on pourrait parler de…", "trouve-moi un sujet", "quels récits possibles pour ce sujet", or /idea.
 metadata:
   author: Big Emotion
   version: "1.0.0"
@@ -10,11 +10,11 @@ metadata:
 # Idea
 
 Turns a seed into **a subject report**, not a piece of content. The report is the
-document that lets the next step, `structure-carousel`, write cards without asking
+document that lets the next step (`structure-carousel`, `structure-reel` or `structure-image`), write cards without asking
 another question. Nothing comes before this step.
 
 ```
-seed (or audit report)  →  idea  →  idea.md + idea.json  →  structure-carousel
+seed (or audit report)  →  idea  →  idea.md + idea.json  →  structure-carousel | structure-reel | structure-image
 ```
 
 The handoff is files, not a conversation: the next session never saw this one.
@@ -53,8 +53,11 @@ The handoff is files, not a conversation: the next session never saw this one.
 - **A recommendation is not a choice** in interactive mode. After stage 3, wait.
 - **An unknown is valid content.** Never invent a date, an author or a route to fill
   a block. A claim with no source cannot carry the chosen outline.
-- **Duration does not exist for a carousel.** The deck size comes from the project's
-  carousel profile, not from this step.
+- **Duration does not exist for a carousel or an image.** The deck size comes from the
+  project's carousel profile, not from this step. A reel's length is set later by the
+  voice-over, never by this step.
+- **Pick the formats the sources can carry.** One claim fits a single image; a short
+  argument fits a reel; a longer argument with several sources fits a carousel.
 
 ## The rules that make a subject worth keeping
 
@@ -109,7 +112,7 @@ Two files, with fixed names, written to `outputs/`.
 The machine form of the same report; the portal and the next step read it.
 `references/idea.schema.json` is the shape. Required: `question`, `angle`,
 `promise`, `audience`, `hook` (`text`, `payoff`), `wontSay[]`, `sources[]`
-(`title`, `url`, `supports`), `reservations[]`, `formats` (`["carousel"]`),
+(`title`, `url`, `supports`), `reservations[]`, `formats` (any of `carousel`, `reel`, `image`),
 `networks[]` (from the profile), `basis` and `basisReason`.
 
 ## What this step does not do

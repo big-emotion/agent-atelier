@@ -69,3 +69,24 @@ export function validateChoicesSection(markdown) {
 }
 
 export const INTERNAL_NOTE = /\b(TODO|TBD|FIXME|to confirm|to be confirmed|à confirmer|à nommer|à compléter)\b|\*\*/i;
+
+export const MAX_SENTENCE_WORDS = 20;
+export const MAX_TITLE_WORDS = 8;
+// A person or a reference leading the sentence instead of the subject.
+const REFERENCE_FIRST = /^(according to|as (stated|noted|reported) by|selon|d['’]après)\b/i;
+
+// The plain-language rules shared by every format: nothing internal printed,
+// short sentences, the subject before its reference.
+export function plainLanguageProblems(at, value) {
+  const problems = [];
+  if (INTERNAL_NOTE.test(value)) problems.push(`${at} carries an internal note or markup that would be printed.`);
+  for (const sentence of splitSentences(value)) {
+    if (wordCount(sentence) > MAX_SENTENCE_WORDS) {
+      problems.push(`${at}: a sentence has more than ${MAX_SENTENCE_WORDS} words: "${sentence.slice(0, 50)}…"`);
+    }
+    if (REFERENCE_FIRST.test(sentence)) {
+      problems.push(`${at}: subject first, reference after: "${sentence.slice(0, 50)}…"`);
+    }
+  }
+  return problems;
+}

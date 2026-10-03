@@ -12,7 +12,7 @@
     "test": "node --test scripts/*.test.mjs plugins/agent-comms/studio/test/*.test.mjs",
     "check:templates": "node scripts/check-templates.mjs",
     "check:manifests": "node scripts/check-manifests.mjs",
-    "check:forbidden-terms": "node scripts/forbidden-terms.mjs --profile fjellvik plugins/agent-comms/studio/fixtures/runs/fjellvik/outputs",
+    "check:forbidden-terms": "node scripts/forbidden-terms.mjs --profile fjellvik plugins/agent-comms/studio/fixtures/runs/fjellvik && node scripts/forbidden-terms.mjs --profile kalinda plugins/agent-comms/studio/fixtures/runs/kalinda",
     "prepare": "husky"
   },
   "devDependencies": {

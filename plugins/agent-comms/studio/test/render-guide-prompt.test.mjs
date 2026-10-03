@@ -85,3 +85,13 @@ test("missing required parts throw instead of producing a half prompt", () => {
   }
   assert.throws(() => renderGuidePrompt({ ...base(), pack: { name: "idea", skill: "", references: [] } }), /skill/);
 });
+
+test("a generic structure pack takes its deliverables from the format", () => {
+  const generic = { ...base(), pack: { ...base().pack, name: "structure" } };
+  const reel = renderGuidePrompt({ ...generic, format: "reel" });
+  for (const name of ["scenes.json", "narration.txt", "captions.md"]) assert.ok(reel.includes(`=== FILE: ${name} ===`), name);
+  const image = renderGuidePrompt({ ...generic, format: "image" });
+  assert.ok(image.includes("=== FILE: image.json ==="));
+  assert.ok(!image.includes("=== FILE: scenes.json ==="));
+  assert.throws(() => renderGuidePrompt(generic), /format/i);
+});

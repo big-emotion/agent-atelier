@@ -1,8 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { parseGuideAnswer } from "../parse-guide-answer.mjs";
-import { STEP_DELIVERABLES } from "../validators/index.mjs";
-import { readFixtureFiles } from "./helpers.mjs";
+import { STEP_DELIVERABLES, validateStep } from "../validators/index.mjs";
+import { readFixtureFiles, readRun } from "./helpers.mjs";
 
 const expected = STEP_DELIVERABLES["structure-carousel"];
 const outputs = readFixtureFiles(expected);
@@ -82,3 +82,13 @@ test("an answer with no block at all reports every file as missing", () => {
   const { problems } = parseGuideAnswer("I could not do it.", expected);
   assert.deepEqual(problems.map((p) => p.code), expected.map(() => "missing"));
 });
+
+for (const format of ["image", "reel"]) {
+  test(`a ${format} answer round-trips through the parser and validates as its step`, () => {
+    const step = `structure-${format}`;
+    const run = readRun("kalinda", format);
+    const { files, problems } = parseGuideAnswer(answerFrom(run), STEP_DELIVERABLES[step]);
+    assert.deepEqual(problems, []);
+    assert.deepEqual(validateStep(step, files).problems, []);
+  });
+}

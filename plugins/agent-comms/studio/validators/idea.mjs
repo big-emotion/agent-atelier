@@ -9,7 +9,7 @@ import {
 } from "./common.mjs";
 
 const BASES = ["dated-evidence", "exploratory"];
-const FORMATS = ["carousel"];
+const FORMATS = ["carousel", "reel", "image"];
 
 export function validateIdeaJson(text) {
   const parsed = parseJson(text, "idea.json");

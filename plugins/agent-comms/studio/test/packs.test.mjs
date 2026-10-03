@@ -11,7 +11,7 @@ import { findForbiddenTerms } from "../../../../scripts/forbidden-terms.mjs";
 import { pluginDir, studioDir } from "./helpers.mjs";
 
 const skillsDir = join(pluginDir, "skills");
-const derivedPacks = ["idea", "structure-carousel"];
+const derivedPacks = ["idea", "structure-carousel", "structure-image", "structure-reel"];
 const allPacks = [...derivedPacks, "audience-audit", "content-strategist"];
 const walk = (dir) =>
   readdirSync(dir).flatMap((entry) => {
@@ -75,6 +75,19 @@ test("structure-carousel ships cards.schema.json and the images and citations fo
   for (const doc of ["images-format.md", "citations-format.md", "licences.md"]) {
     assert.ok(existsSync(join(refs, doc)), doc);
   }
+});
+
+test("structure-image and structure-reel ship their formats and the render contract", () => {
+  const image = join(skillsDir, "structure-image", "references");
+  for (const doc of ["images-format.md", "citations-format.md", "licences.md", "image.schema.json"]) {
+    assert.ok(existsSync(join(image, doc)), `structure-image ${doc}`);
+  }
+  const reel = join(skillsDir, "structure-reel", "references");
+  for (const doc of ["images-format.md", "citations-format.md", "licences.md", "reel.schema.json", "scenes-contract.md"]) {
+    assert.ok(existsSync(join(reel, doc)), `structure-reel ${doc}`);
+  }
+  const schema = JSON.parse(readFileSync(join(reel, "reel.schema.json"), "utf8"));
+  assert.deepEqual(schema.required.sort(), ["campaign", "scenes", "title", "version"]);
 });
 
 test("both profile fixtures are valid profiles", () => {

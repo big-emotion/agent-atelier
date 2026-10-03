@@ -1,11 +1,11 @@
+import { describeDeck } from "./deck.mjs";
 import {
-  INTERNAL_NOTE,
+  plainLanguageProblems,
   CHOICES_HEADING,
   hasHeading,
   isHttpUrl,
   isNonEmptyString,
   parseJson,
-  splitSentences,
   validateChoicesSection,
   wordCount,
 } from "./common.mjs";
@@ -13,12 +13,9 @@ import {
 const MIN_CARDS = 4;
 const MAX_CARDS = 9;
 const MAX_COVER_WORDS = 8;
-const MAX_SENTENCE_WORDS = 20;
 const MAX_QUOTE_CHARS = 300;
 const PAIR_TEXT_FIELDS = ["titre", "precision", "punchline", "corps"];
 const COMMONS_TITLE = /^File:.+\.(jpe?g|png|webp)$/i;
-// Attribution opener = a person or a reference leading the sentence instead of the subject.
-const REFERENCE_FIRST = /^(according to|as (stated|noted|reported) by|selon|d['’]après)\b/i;
 
 const parsedFile = (ctx, name) => {
   const text = ctx?.files?.[name];
@@ -61,15 +58,7 @@ export function validateCards(text, ctx = {}) {
     for (const field of PAIR_TEXT_FIELDS) {
       const value = card[field];
       if (!isNonEmptyString(value)) continue;
-      if (INTERNAL_NOTE.test(value)) problems.push(`${at}.${field} carries an internal note or markup that would be printed.`);
-      for (const sentence of splitSentences(value)) {
-        if (wordCount(sentence) > MAX_SENTENCE_WORDS) {
-          problems.push(`${at}.${field}: a sentence has more than ${MAX_SENTENCE_WORDS} words: "${sentence.slice(0, 50)}…"`);
-        }
-        if (REFERENCE_FIRST.test(sentence)) {
-          problems.push(`${at}.${field}: subject first, reference after: "${sentence.slice(0, 50)}…"`);
-        }
-      }
+      problems.push(...plainLanguageProblems(`${at}.${field}`, value));
     }
 
     // A claim without a source never reaches a reader. The cover asks a question
@@ -119,10 +108,13 @@ export function validateImages(text, ctx = {}) {
     // Any licence written here is ignored: the server reads it from Commons.
   });
 
-  const cards = parsedFile(ctx, "cards.json")?.cartes;
-  if (Array.isArray(cards)) {
-    const used = new Set(cards.map((card) => card?.image?.id));
-    for (const id of seen) if (!used.has(id)) problems.push(`Image "${id}" is used by no card.`);
+  const deck = describeDeck(ctx.files);
+  if (deck?.format === "image" && images.length !== 1) {
+    problems.push("A single image lists exactly one image in images.json.");
+  }
+  if (deck) {
+    const used = new Set(deck.imageIds);
+    for (const id of seen) if (!used.has(id)) problems.push(`Image "${id}" is used by no ${deck.noun === "scene" ? "scene" : "card"}.`);
   }
   return problems;
 }
@@ -133,13 +125,17 @@ export function validateCitations(text, ctx = {}) {
   const citations = parsed.value.citations;
   if (!Array.isArray(citations)) return ["citations must be a list."];
   const problems = [];
-  const cards = parsedFile(ctx, "cards.json")?.cartes;
-  const ranks = Array.isArray(cards) ? cards.map((card) => card.rang) : null;
+  const deck = describeDeck(ctx.files);
+  const key = deck?.citationKey ?? "card";
 
   citations.forEach((citation, index) => {
     const at = `citations[${index}]`;
-    if (!Number.isInteger(citation?.card)) problems.push(`${at}.card must be a card rank.`);
-    else if (ranks && !ranks.includes(citation.card)) problems.push(`${at}: card ${citation.card} does not exist in cards.json.`);
+    const ref = citation?.[key];
+    if (ref === undefined || ref === null || ref === "") {
+      problems.push(`${at}.${key} is required: the ${deck?.noun ?? "card"} that makes the claim.`);
+    } else if (deck && !deck.units.some((unit) => unit.ref === ref)) {
+      problems.push(`${at}: ${key} ${ref} does not exist in ${deck.mainFile}.`);
+    }
     if (!isNonEmptyString(citation?.claim)) problems.push(`${at}.claim is required.`);
     if (!isHttpUrl(citation?.sourceUrl)) problems.push(`${at}.sourceUrl must be an http(s) URL.`);
     if (!isNonEmptyString(citation?.quote)) {
@@ -149,12 +145,10 @@ export function validateCitations(text, ctx = {}) {
     }
   });
 
-  if (Array.isArray(cards)) {
-    const cited = new Set(citations.map((citation) => citation?.card));
-    for (const card of cards) {
-      if (isNonEmptyString(card?.source) && !cited.has(card.rang)) {
-        problems.push(`Card ${card.rang} has a source but no entry in citations.json.`);
-      }
+  if (deck) {
+    const cited = new Set(citations.map((citation) => citation?.[key]));
+    for (const unit of deck.units) {
+      if (unit.sourced && !cited.has(unit.ref)) problems.push(`${unit.label} has a source but no entry in citations.json.`);
     }
   }
   return problems;

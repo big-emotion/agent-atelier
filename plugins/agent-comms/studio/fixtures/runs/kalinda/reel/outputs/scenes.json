@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "campaign": "pagne-indigo-reel",
+  "title": "Ton pagne indigo déteste l'eau chaude",
+  "aspect": "9:16",
+  "scenes": [
+    {
+      "id": "s1",
+      "role": "hook",
+      "voiceover": "Ton pagne indigo déteste l'eau chaude.",
+      "captionText": "L'eau chaude ternit",
+      "source": "",
+      "shot": { "kind": "still", "imageId": "img-1", "identite": "Un tissu bleu indigo plié sur une table en bois" }
+    },
+    {
+      "id": "s2",
+      "role": "body",
+      "voiceover": "L'eau froide protège la couleur.",
+      "captionText": "Eau froide",
+      "source": "Guide d'entretien des textiles, section 1",
+      "shot": { "kind": "textcard", "text": "Eau froide" }
+    },
+    {
+      "id": "s3",
+      "role": "body",
+      "voiceover": "Le séchage se fait à l'ombre.",
+      "captionText": "Séchage à l'ombre",
+      "source": "Guide d'entretien des textiles, section 2",
+      "shot": { "kind": "textcard", "text": "Séchage à l'ombre" }
+    },
+    {
+      "id": "s4",
+      "role": "closing",
+      "voiceover": "Partage ce que ta famille sait sur les tissus.",
+      "captionText": "Partage ton savoir",
+      "source": "",
+      "shot": { "kind": "textcard", "text": "Partage ton savoir" }
+    }
+  ]
+}

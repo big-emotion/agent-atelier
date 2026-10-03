@@ -17,3 +17,14 @@ export const allFixtureFiles = () =>
 
 // Deep-cloned parsed fixture, so a test can break one field without touching the others.
 export const jsonFixture = (name) => JSON.parse(readFixture(name));
+
+// A format run lives beside the carousel run: runs/<profile>/<format>/outputs.
+export const runOutputs = (profile, format) =>
+  join(studioDir, "fixtures", "runs", profile, format, "outputs");
+
+export function readRun(profile, format) {
+  const dir = runOutputs(profile, format);
+  return Object.fromEntries(readdirSync(dir).map((name) => [name, readFileSync(join(dir, name), "utf8")]));
+}
+
+export const jsonOf = (files, name) => JSON.parse(files[name]);

@@ -8,6 +8,8 @@ one contract.
 | --- | --- |
 | `idea` | `idea.md`, `idea.json` |
 | `structure-carousel` | `cards.json`, `captions.md`, `sources.md`, `images.json`, `citations.json` |
+| `structure-image` | `image.json` (title, text, alt text, the image), `captions.md`, `sources.md`, `images.json`, `citations.json` |
+| `structure-reel` | `scenes.json` (the engine-neutral render contract), `narration.txt`, `captions.md`, `sources.md`, `images.json`, `citations.json` |
 | `audience-audit` | `audience-report.md` |
 | `content-strategist` | `strategy.md`, `ideas.json` |
 
@@ -43,7 +45,7 @@ validators and everything after them never care which way the step ran.
 | `parse-guide-answer.mjs` | `parseGuideAnswer(text, expectedFiles)` to `{ files, problems }`. A malformed or missing block reports the file name, a stable `code` and a message. |
 | `load-pack.mjs` | Reads a pack directory into the shape the renderer takes. |
 | `fixtures/profiles/` | One folder per project profile: `profile.md` and `terms.json` (the vocabulary that must not leak into another profile's output). |
-| `fixtures/runs/fjellvik/outputs/` | A complete, valid set of deliverables for the fictional profile; the tests and `check:forbidden-terms` run on it. |
+| `fixtures/runs/<profile>/` | Valid deliverable sets per fictional profile: `fjellvik` has a carousel run (`outputs/`, with the idea and audit steps), an image run and a reel run; `kalinda` has an image run and a reel run. The tests and `check:forbidden-terms` run on all of them. |
 | `../../../scripts/forbidden-terms.mjs` | Fails when an output carries a term from another profile. |
 
 ### Guide-mode answer format
@@ -70,17 +72,24 @@ empty block, a duplicate, a file outside the step or a path-like name are report
   (300 characters) are defaults, not laws of the contract; a profile may override them.
   The field names are those of the current carousel render engine; a change there
   changes `cards.schema.json` and the validator together.
-- **Carousel first.** Reels are added in a later phase. The contract itself (working
-  folder, fixed deliverable names, `## Choix faits pour toi`, the two run modes, the
-  validators and the guide-mode answer format) is format-agnostic: only the
-  `structure-carousel` deliverables and validators are carousel-specific.
+- **Three formats.** The contract itself (working folder, fixed deliverable names,
+  `## Choix faits pour toi`, the two run modes, the validators and the guide-mode
+  answer format) is format-agnostic. Only the structure step differs: pick its
+  deliverables with `deliverablesFor("structure", format)` (`carousel`, `reel` or
+  `image`); `validateStep` and `renderGuidePrompt` accept a `format` for the generic
+  `structure` step. `images.json`, `citations.json` and `sources.md` are shared:
+  citations point at a card (`card`) or, for a reel, a scene (`scene`).
+- **Reel render contract.** `scenes.json` says what is said and shown per scene and
+  never how (no timings, layout, fonts or colours), so any engine can consume it.
+  See `skills/structure-reel/references/scenes-contract.md`. Voicing and timing are
+  the render side's job.
 
 ## Manual acceptance checklist (not run by CI)
 
 These need a model, a key or an interactive session, so they are done by hand and
 ticked in the pull request that bumps a pack.
 
-For **each pack** (`idea`, `structure-carousel`, `audience-audit`, `content-strategist`) and for **each of two profiles**: the production profile of the first project, and a fictional profile from a different domain and language (`fixtures/profiles/fjellvik`).
+For **each pack** (`idea`, `structure-carousel`, `structure-image`, `structure-reel`, `audience-audit`, `content-strategist`) and for **each of two profiles** (`fixtures/profiles/fjellvik`, English, and `fixtures/profiles/kalinda`, French). Image and reel runs are done for both profiles, from the same idea, and compared with the reference runs in `fixtures/runs/`.
 
 - [ ] **API mode:** run the pack headless against a prepared working folder, with the
       Write-restricted tool set (no shell). Collect `outputs/`.
@@ -91,6 +100,7 @@ For **each pack** (`idea`, `structure-carousel`, `audience-audit`, `content-stra
 - [ ] `validateStep` accepts the result of every run above (`problems` is empty).
 - [ ] `node scripts/forbidden-terms.mjs --profile <name> <outputs-dir>` reports no term
       from the other profile, in both directions.
+- [ ] **Image and reel:** the reel's `narration.txt` equals the scene voice-overs, every still is a Commons title, the alt text describes the picture, and `scenes.json` carries no layout field.
 - [ ] A revision run (`revision.md` plus `inputs/previous/`) changes only what the
       sentence asks.
 - [ ] `## Choix faits pour toi` lists every real decision with a reason, and no invented

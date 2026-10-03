@@ -1,4 +1,4 @@
-import { STEP_DELIVERABLES } from "./validators/index.mjs";
+import { deliverablesFor } from "./validators/index.mjs";
 
 // Builds the one self-contained prompt behind "Faire avec mon abonnement".
 // The user pastes it into their own session (claude.ai, Claude Code, Codex,
@@ -14,14 +14,19 @@ const required = (value, label) => {
 const tagged = (tag, attributes, content) =>
   `<${tag}${attributes ? ` ${attributes}` : ""}>\n${content.trim()}\n</${tag}>`;
 
-export function renderGuidePrompt({ pack, profile, inputs = [], previous = [], revision = null, contract, deliverables }) {
+export function renderGuidePrompt({ pack, profile, inputs = [], previous = [], revision = null, contract, deliverables, format }) {
   const step = required(pack?.name, "pack.name");
   const skill = required(pack?.skill, "pack.skill");
   const profileText = required(profile, "profile");
   const contractText = required(contract, "contract");
-  const files = deliverables ?? STEP_DELIVERABLES[step];
-  if (!files || files.length === 0) {
-    throw new Error(`renderGuidePrompt: no deliverables known for "${step}"; pass deliverables.`);
+  // Deliverables follow the step and, for the generic "structure" pack, the format.
+  let files = deliverables;
+  if (!files) {
+    try {
+      files = deliverablesFor(step, format);
+    } catch (error) {
+      throw new Error(`renderGuidePrompt: no deliverables known for "${step}" (${error.message}); pass deliverables or a format.`);
+    }
   }
 
   const sections = [

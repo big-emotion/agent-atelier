@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "scenes.json",
+  "description": "Engine-neutral reel plan: what is said and shown per scene, never how. See scenes-contract.md.",
+  "type": "object",
+  "required": ["version", "campaign", "title", "scenes"],
+  "properties": {
+    "version": { "const": 1 },
+    "campaign": { "type": "string" },
+    "title": { "type": "string", "description": "Eight words at most." },
+    "aspect": { "const": "9:16" },
+    "scenes": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "required": ["id", "role", "voiceover", "captionText", "shot"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "role": { "enum": ["hook", "body", "closing"] },
+          "voiceover": { "type": "string", "description": "Twenty words per sentence at most; subject first." },
+          "captionText": { "type": "string" },
+          "source": { "type": "string", "description": "Required on every body scene." },
+          "shot": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": ["kind", "imageId", "identite"],
+                "additionalProperties": false,
+                "properties": {
+                  "kind": { "const": "still" },
+                  "imageId": { "type": "string", "description": "An id from images.json." },
+                  "identite": { "type": "string" }
+                }
+              },
+              {
+                "type": "object",
+                "required": ["kind", "text"],
+                "additionalProperties": false,
+                "properties": {
+                  "kind": { "const": "textcard" },
+                  "text": { "type": "string", "description": "Twelve words at most." }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

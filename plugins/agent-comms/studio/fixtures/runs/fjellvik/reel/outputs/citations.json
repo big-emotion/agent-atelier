@@ -1,0 +1,16 @@
+{
+  "citations": [
+    {
+      "scene": "s2",
+      "claim": "Crews rebuild the culverts every October.",
+      "sourceUrl": "https://example.org/ridge-line/maintenance-plan",
+      "quote": "culverts are rebuilt each October"
+    },
+    {
+      "scene": "s3",
+      "claim": "The route reopens when they finish.",
+      "sourceUrl": "https://example.org/ridge-line/maintenance-plan",
+      "quote": "the route reopens once the works end"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "image.json",
+  "description": "The brief for a single-image post. Field names follow cards.json so the same render engine can read it as a one-card deck.",
+  "type": "object",
+  "required": ["campagne", "titre", "alt", "image"],
+  "properties": {
+    "campagne": { "type": "string", "description": "A short slug for the piece." },
+    "titre": { "type": "string", "description": "Eight words at most." },
+    "texte": { "type": "string", "description": "Optional. At most two short sentences, twenty words each, subject first." },
+    "source": { "type": "string", "description": "Short, identifiable source. Required when texte is present." },
+    "alt": { "type": "string", "maxLength": 150, "description": "What the picture shows, for someone who cannot see it. No 'image of'." },
+    "image": {
+      "type": "object",
+      "required": ["id", "identite"],
+      "properties": {
+        "id": { "type": "string", "description": "The one id in images.json." },
+        "identite": { "type": "string", "description": "One sentence on what the image shows, without naming its author or licence." },
+        "cadrage": { "type": "string", "description": "Optional crop focus, for example \"50% 40%\"." }
+      }
+    }
+  }
+}

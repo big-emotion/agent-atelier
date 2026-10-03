@@ -1,0 +1,16 @@
+{
+  "citations": [
+    {
+      "scene": "s2",
+      "claim": "L'eau froide protège la couleur.",
+      "sourceUrl": "https://example.org/guide-textiles/indigo",
+      "quote": "laver à l'eau froide"
+    },
+    {
+      "scene": "s3",
+      "claim": "Le séchage se fait à l'ombre.",
+      "sourceUrl": "https://example.org/guide-textiles/indigo",
+      "quote": "sécher à l'ombre"
+    }
+  ]
+}

@@ -63,8 +63,8 @@ test("dated-evidence basis must cite a date, exploratory must give a reason", ()
   assert.ok(unknown.some((p) => /basis/.test(p)));
 });
 
-test("formats may only be carousel in this pack", () => {
-  const problems = validateIdeaJson(breakIdea((idea) => (idea.formats = ["reel"])));
+test("formats are carousel, reel or image", () => {
+  const problems = validateIdeaJson(breakIdea((idea) => (idea.formats = ["podcast"])));
   assert.ok(problems.some((p) => /formats/.test(p)));
 });
 

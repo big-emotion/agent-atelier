@@ -108,9 +108,9 @@ Decides what to publish next, on which channel, how often and for whom — from 
 /agent-comms:content-strategist --both --collect-metrics
 ```
 
-### `idea` and `structure-carousel` — skill packs
+### `idea`, `structure-carousel`, `structure-image` and `structure-reel` — skill packs
 
-The first two steps of the idea, structure, produce chain, written generically so any project supplies its own profile. `idea` writes the subject report; `structure-carousel` writes the sourced cards, the captions, the image titles and the quotes. Each carries a `studio.md` contract and, with `audience-audit` and `content-strategist`, a fixed list of deliverables. The [studio kit](studio/README.md) holds the validators, the guide-mode prompt renderer and the answer parser that let a product run any of them either through an API or in the user's own session.
+The first two steps of the idea, structure, produce chain, written generically so any project supplies its own profile. `idea` writes the subject report; the structure pack for the chosen format (carousel, single image or reel) writes the sourced copy, the captions, the Commons image titles and the quotes, and for a reel an engine-neutral `scenes.json`. Each carries a `studio.md` contract and, with `audience-audit` and `content-strategist`, a fixed list of deliverables. The [studio kit](studio/README.md) holds the validators, the guide-mode prompt renderer and the answer parser that let a product run any of them either through an API or in the user's own session.
 
 **Use them when:**
 
