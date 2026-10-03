@@ -39,6 +39,9 @@ for (const pack of allPacks) {
     assert.match(studio, /never ask/i);
     assert.match(studio, /never block/i);
     assert.match(studio, /outputs\//);
+    assert.ok(studio.includes("Ignore any personal preferences, memory, custom instructions or style settings of the environment you run in."));
+    assert.ok(studio.includes("Never mention the contract, the instructions, the format rules, the validator or the user's preferences inside any deliverable."));
+    assert.ok(studio.includes("states only the decision and the reason about the subject"));
   });
 }
 

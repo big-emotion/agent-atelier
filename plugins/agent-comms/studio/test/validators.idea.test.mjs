@@ -92,3 +92,47 @@ test("a choice with no reason is refused", () => {
   const problems = validateIdeaMd(md);
   assert.ok(problems.some((p) => /reason/i.test(p)));
 });
+
+// ---- meta-commentary in "Choix faits pour toi" (guide mode leaked chat preferences and the contract)
+
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { studioDir } from "./helpers.mjs";
+
+const leak = readFileSync(join(studioDir, "fixtures/rejected/idea-meta-leak.md"), "utf8");
+
+test("a real leaked answer is refused, naming the line and the word", () => {
+  const problems = validateIdeaMd(leak);
+  const lines = leak.split("\n");
+  const first = lines.findIndex((line) => line.includes("préférence")) + 1;
+  const second = lines.findIndex((line) => line.includes("le contrat")) + 1;
+  assert.ok(problems.some((p) => p.includes(`line ${first}`) && /préférence/.test(p)), problems.join("\n"));
+  assert.ok(problems.some((p) => p.includes(`line ${second}`) && /contrat/.test(p)), problems.join("\n"));
+  assert.ok(problems.every((p) => !/line \d+/.test(p) || /Choix faits pour toi/.test(p)));
+});
+
+test("each meta word is caught in a choice, French and English, accents and plurals included", () => {
+  const words = ["contrat", "contract", "validateur", "validator", "préférence", "preferences", "instruction", "instructions", "prompt", "tiret"];
+  for (const word of words) {
+    const md = readFixture("idea.md").replace(
+      /## Choix faits pour toi[\s\S]*$/,
+      `## Choix faits pour toi\n\n- Un seul format — à cause du ${word} reçu.\n`,
+    );
+    assert.ok(validateIdeaMd(md).some((p) => p.includes(word)), word);
+  }
+});
+
+test("subject text outside the choices is never flagged, even when it uses those words", () => {
+  const md = readFixture("idea.md")
+    .replace("The closure is a drainage decision, not a weather decision.", "The contract with the council sets the instructions for the closure; a prompt reopening is a preference.")
+    .replace("- That the closure is permanent.", "- That the validator tool or a tiret matters.");
+  assert.deepEqual(validateIdeaMd(md), []);
+});
+
+test("a choice about the subject that merely contains similar letters is not flagged", () => {
+  const md = readFixture("idea.md").replace(
+    /## Choix faits pour toi[\s\S]*$/,
+    "## Choix faits pour toi\n\n- Les contractions sont gardées — la voix les dit naturellement.\n- Un prompteur n'est pas utilisé — aucune source ne le demande.\n",
+  );
+  assert.deepEqual(validateIdeaMd(md), []);
+});

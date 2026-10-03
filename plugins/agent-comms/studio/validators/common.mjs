@@ -57,15 +57,38 @@ export function requireHeadings(markdown, headings) {
     .map((heading) => `Missing section "${heading}".`);
 }
 
+// The choices are read by the client. A model running in someone's own session
+// sometimes explains itself by quoting the contract or the user's chat
+// preferences; that is never a decision about the subject.
+const META_WORD = /(?<![\p{L}])(contrats?|contracts?|validateurs?|validators?|préférences?|preferences?|instructions?|prompts?|tirets?)(?![\p{L}])/iu;
+
 // One bullet per choice, each with a reason after a dash: "- <choice> — <why>".
+// Only this section is scanned for meta words: the same words are legitimate
+// subject vocabulary everywhere else in a deliverable.
 export function validateChoicesSection(markdown) {
-  const body = sectionBody(markdown, CHOICES_HEADING);
-  if (body === null) return [`Missing section "${CHOICES_HEADING}".`];
-  const bullets = body.split("\n").filter((line) => /^\s*[-*]\s+/.test(line));
+  const lines = markdown.split("\n");
+  const start = lines.findIndex((line) => line.trim() === CHOICES_HEADING);
+  if (start === -1) return [`Missing section "${CHOICES_HEADING}".`];
+  const end = lines.findIndex((line, i) => i > start && /^#{1,2}\s/.test(line));
+  const section = lines.slice(start + 1, end === -1 ? lines.length : end);
+  const bullets = section
+    .map((text, offset) => ({ text, number: start + 2 + offset }))
+    .filter(({ text }) => /^\s*[-*]\s+/.test(text));
   if (bullets.length === 0) return [`"${CHOICES_HEADING}" must list at least one choice.`];
-  return bullets
-    .filter((line) => !/\s[—–-]\s+\S.{2,}/.test(line))
-    .map((line) => `A choice has no reason ("<choice> — <reason>"): ${line.trim().slice(0, 60)}`);
+
+  const problems = [];
+  for (const { text, number } of bullets) {
+    const meta = META_WORD.exec(text);
+    if (meta) {
+      problems.push(
+        `"${CHOICES_HEADING}", line ${number}, mentions "${meta[1]}": state only the decision and its reason about the subject, never the contract, the instructions or anyone's preferences. (Ligne ${number} : parle uniquement du sujet.)`,
+      );
+    }
+    if (!/\s[—–-]\s+\S.{2,}/.test(text)) {
+      problems.push(`A choice has no reason ("<choice> — <reason>"): ${text.trim().slice(0, 60)}`);
+    }
+  }
+  return problems;
 }
 
 export const INTERNAL_NOTE = /\b(TODO|TBD|FIXME|to confirm|to be confirmed|à confirmer|à nommer|à compléter)\b|\*\*/i;

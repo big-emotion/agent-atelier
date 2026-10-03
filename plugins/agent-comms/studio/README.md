@@ -60,6 +60,18 @@ The closing line is optional (a block also ends at the next header). Chatter aro
 the blocks and a code fence around a block are tolerated. A malformed header, an
 empty block, a duplicate, a file outside the step or a path-like name are reported.
 
+### Clean deliverables
+
+The client reads the deliverables, so every `studio.md` and the guide-mode prompt
+wrapper tell the model to ignore the personal preferences, memory and style settings
+of the session it runs in, and never to mention the contract, the instructions, the
+validator or the user's preferences. The validators back this up: a line of
+`## Choix faits pour toi` that mentions a meta word (contract/contrat,
+validator/validateur, preference/préférence, instruction, prompt, tiret) is rejected
+with its line number, in every deliverable that carries the section. Only that
+section is scanned, so the same words stay legitimate elsewhere. A real leaked answer
+is kept as `fixtures/rejected/idea-meta-leak.md`.
+
 ### Declared limits
 
 - The validators check **shape and the rules that can be checked without a model**
@@ -103,6 +115,7 @@ For **each pack** (`idea`, `structure-carousel`, `structure-image`, `structure-r
 - [ ] **Image and reel:** the reel's `narration.txt` equals the scene voice-overs, every still is a Commons title, the alt text describes the picture, and `scenes.json` carries no layout field.
 - [ ] A revision run (`revision.md` plus `inputs/previous/`) changes only what the
       sentence asks.
+- [ ] `## Choix faits pour toi` mentions no preference, contract or instruction of the session, only subject decisions with their reasons.
 - [ ] `## Choix faits pour toi` lists every real decision with a reason, and no invented
       source, quote or figure appears (a person opens the sources).
 - [ ] Record, per run: the model, the mode, the cost where known, and the validation result.

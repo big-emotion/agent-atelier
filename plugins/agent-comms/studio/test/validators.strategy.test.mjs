@@ -54,3 +54,10 @@ test("an idea needs a seed the idea step can start from", () => {
   ideas.ideas[0].seed = "";
   assert.ok(validateIdeas(JSON.stringify(ideas)).some((p) => /seed/.test(p)));
 });
+
+test("the meta-commentary rule also guards the audience report and the strategy", () => {
+  const report = readFixture("audience-report.md").replace("it is the default and no other period was supplied", "the contract asks for 30 days");
+  assert.ok(validateAudienceReport(report).some((p) => /contract/.test(p) && /Choix faits pour toi/.test(p)));
+  const strategy = readFixture("strategy.md").replace("the report shows one dead end worth fixing first", "ma préférence de style");
+  assert.ok(validateStrategy(strategy).some((p) => /préférence/.test(p)));
+});

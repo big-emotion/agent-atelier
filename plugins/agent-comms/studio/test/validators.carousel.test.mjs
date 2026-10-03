@@ -176,3 +176,8 @@ test("captions.md needs the choices section", () => {
   const md = readFixture("captions.md").replace("## Choix faits pour toi", "## Notes");
   assert.ok(validateCaptions(md, ctx).some((p) => p.includes("Choix faits pour toi")));
 });
+
+test("captions.md refuses meta-commentary in its choices", () => {
+  const md = readFixture("captions.md").replace("the profile asks for sourced captions", "the instructions say so");
+  assert.ok(validateCaptions(md, ctx).some((p) => /instructions/.test(p) && /Choix faits pour toi/.test(p)));
+});

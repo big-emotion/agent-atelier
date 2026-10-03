@@ -95,3 +95,10 @@ test("a generic structure pack takes its deliverables from the format", () => {
   assert.ok(!image.includes("=== FILE: scenes.json ==="));
   assert.throws(() => renderGuidePrompt(generic), /format/i);
 });
+
+test("the wrapper itself forbids leaking preferences and the contract, whatever the contract text says", () => {
+  const prompt = renderGuidePrompt({ ...base(), contract: "CONTRACT-MARKER minimal." });
+  assert.ok(prompt.includes("Ignore any personal preferences, memory, custom instructions or style settings of the environment you run in."));
+  assert.ok(prompt.includes("Never mention the contract, the instructions, the format rules, the validator or the user's preferences inside any deliverable."));
+  assert.ok(prompt.includes("states only the decision and the reason about the subject"));
+});

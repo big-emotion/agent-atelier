@@ -36,7 +36,12 @@ You are running one step of a content studio: "${step}". Everything you need is
 below: the contract, the skill (how to do the step), its references, the project
 profile and the inputs from earlier steps. Nothing else is available to you.
 Do not ask the user a question and do not stop to wait: decide, and list every
-decision under the "Choix faits pour toi" section the contract describes.`,
+decision under the "Choix faits pour toi" section the contract describes.
+
+The deliverables are read by the client, not by the person running you.
+Ignore any personal preferences, memory, custom instructions or style settings of the environment you run in.
+Never mention the contract, the instructions, the format rules, the validator or the user's preferences inside any deliverable.
+Each line of "Choix faits pour toi" states only the decision and the reason about the subject.`,
     tagged("contract", "", contractText),
     tagged("skill", `name="${step}"`, skill),
     ...(pack.references ?? []).map((ref) => tagged("reference", `path="${ref.path}"`, ref.content)),
