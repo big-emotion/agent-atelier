@@ -18,9 +18,16 @@ const walk = (dir) =>
     const path = join(dir, entry);
     return statSync(path).isDirectory() ? walk(path) : [path];
   });
-const ethniafricaTerms = JSON.parse(
-  readFileSync(join(studioDir, "fixtures/profiles/ethniafrica/terms.json"), "utf8"),
-).terms;
+// Vocabulary of the source project's own series and editorial checks, which
+// must not survive in a generic pack, plus the other fixture brand's terms.
+const sourceOnlyTerms = [
+  "afrik",
+  "onomast",
+  "décolonial",
+  "decolonial",
+  "name-origin",
+  ...JSON.parse(readFileSync(join(studioDir, "fixtures/profiles/kalinda/terms.json"), "utf8")).terms,
+];
 
 for (const pack of allPacks) {
   test(`${pack}: the pack has SKILL.md with frontmatter and a studio.md contract`, () => {
@@ -46,10 +53,10 @@ for (const pack of derivedPacks) {
     }
   });
 
-  test(`${pack}: no EthniAfrica-only term survives in the pack text`, () => {
+  test(`${pack}: no source-project-only term survives in the pack text`, () => {
     const files = walk(join(skillsDir, pack)).filter((f) => !f.endsWith("derived-from.json"));
     const hits = files.flatMap((file) =>
-      findForbiddenTerms(readFileSync(file, "utf8"), ethniafricaTerms).map((hit) => `${relative(skillsDir, file)}:${hit.line} ${hit.term}`),
+      findForbiddenTerms(readFileSync(file, "utf8"), sourceOnlyTerms).map((hit) => `${relative(skillsDir, file)}:${hit.line} ${hit.term}`),
     );
     assert.deepEqual(hits, []);
   });
@@ -71,7 +78,7 @@ test("structure-carousel ships cards.schema.json and the images and citations fo
 });
 
 test("both profile fixtures are valid profiles", () => {
-  for (const name of ["ethniafrica", "fjellvik"]) {
+  for (const name of ["kalinda", "fjellvik"]) {
     const profile = readFileSync(join(studioDir, "fixtures/profiles", name, "profile.md"), "utf8");
     assert.deepEqual(validateProfile(profile), [], name);
   }

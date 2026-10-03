@@ -1,15 +1,15 @@
 {
-  "sourceRepo": "ethniafrica",
-  "description": "Generic, English, de-branded rewrite of the source skill. The sha256 is the hash of the source file when it was last reconciled; npm run check:skill-drift in the source repo reports a change.",
+  "sourceRepo": "source",
+  "description": "Generic, English, de-branded rewrite of the source skill. The sha256 is the hash of the source file when it was last reconciled; the source project's drift report flags a change.",
   "files": [
     {
       "pack": "SKILL.md",
-      "source": ".claude/skills/ethniafrica-idee/SKILL.md",
+      "source": "source/idea/SKILL.md",
       "sha256": "e20844ae1f3f8b9084a472962be08cce44640a253e2cbad5a5d9f5e521c45bc2"
     },
     {
       "pack": "references/narrative-patterns.md",
-      "source": ".claude/skills/ethniafrica-idee/references/narrative-patterns.md",
+      "source": "source/narrative-patterns.md",
       "sha256": "0681f6480a8c1b41a48b44174ddc8cd54b3cb53a67092c9a5da1e14c065c4009"
     }
   ]

@@ -19,14 +19,14 @@ items below, it has not finished.
    editorial owner.
 4. **The rhetoric flags.** Which sentences are editorial emphasis rather than
    sourced findings, marked as such **in the deliverable itself**. This is not
-   optional. The strongest sentence in the best-loved EthniAfrica script is
+   optional. The strongest sentence in the best-loved script of the reference project is
    rhetoric, and it is only safe because the memory says so.
 5. **The speech/text split.** For every foreign, historical or homographic form:
    spoken, or shown as a text card — with the reason. The voice collapses
    homographs and has already destroyed an etymological argument silently.
 6. **The pronunciation flags.** The proper nouns a human must listen to before
    publication. Neither the agent nor the alignment report can hear.
-7. **The closing line**, with the subject class that justifies it (an ethnonym,
+7. **The closing line**, with the subject class that justifies it (a people's name,
    a place name, or neither).
 
 On request, add **per-surface hook variants** — the hook rewritten for TikTok,
@@ -62,7 +62,7 @@ Walk it in order. The first failure stops the hand-off.
 
 ## Hand-off
 
-The approved script goes to the project's production reference. On EthniAfrica
+The approved script goes to the project's production reference. On the reference project
 that format is written and frozen — voice, pacing, canvas, captions, brand
 ending, deliverables. **Do not redesign it from a scripting session**, and do
 not restate it here; read it where it lives.

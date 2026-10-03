@@ -23,7 +23,7 @@ Speech/text split: "Rio dos Camarões" is SHOWN, not spoken — the voice
 collapses it toward the French form and the etymology dies silently.
 
 Closing line: subject class = place name → « Retrouve l'histoire de chaque
-pays sur EthniAfrica » (never « chaque peuple » on a toponym episode).
+pays sur le site » (never « chaque peuple » on a toponym episode).
 ```
 
 Run it with `--critique` on a piece that underperformed, and it walks the beats in order and reports the *first* one that fails — attention leaks forward, so a broken beat 1 makes beats 2–6 unmeasurable.

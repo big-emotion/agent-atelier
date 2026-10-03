@@ -66,8 +66,14 @@ empty block, a duplicate, a file outside the step or a path-like name are report
 - Licences, Commons metadata, source reachability and quote matching are
   **server-side post-processing**, not part of this kit. `images.json` carries
   titles and reasons only; any licence written there is ignored.
-- The deck size (4 to 9) and the engine's field names are those of the current
-  render engine; a change there changes `cards.schema.json` and the validator together.
+- **Defaults, overridable by profile.** The deck size (4 to 9 cards) and the quote cap
+  (300 characters) are defaults, not laws of the contract; a profile may override them.
+  The field names are those of the current carousel render engine; a change there
+  changes `cards.schema.json` and the validator together.
+- **Carousel first.** Reels are added in a later phase. The contract itself (working
+  folder, fixed deliverable names, `## Choix faits pour toi`, the two run modes, the
+  validators and the guide-mode answer format) is format-agnostic: only the
+  `structure-carousel` deliverables and validators are carousel-specific.
 
 ## Manual acceptance checklist (not run by CI)
 

@@ -1,6 +1,6 @@
 # A worked example — the first measured run
 
-The baseline run of this audit on **EthniAfrica** (Big Emotion's own open atlas
+The baseline run of this audit on the reference project (Big Emotion's own open atlas
 of African peoples and languages), 2026-09-07, 30 days, consented sessions.
 Kept here because it shows what the report's findings look like when they are
 worth acting on — not as a benchmark to compare another site against.

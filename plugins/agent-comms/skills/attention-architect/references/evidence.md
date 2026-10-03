@@ -1,13 +1,13 @@
 # The measured record
 
 What was actually published and what it produced. **This file is updated from
-measurement, never from expectation** — on EthniAfrica the numbers come from
-`/ethniafrica-audience-audit`, which writes dated reports to `docs/audience/`.
+measurement, never from expectation** — on the reference project the numbers come from
+the audience-audit skill, which writes dated reports to `docs/audience/`.
 
 A doctrine rule with no line in this file is a borrowed rule, and the pattern
 that carries it says `borrowed`.
 
-## EthniAfrica — YouTube, September 2026
+## Reference project — YouTube, September 2026
 
 Channel size at measurement: **16 subscribers**. Measured 2026-09-07.
 
@@ -32,7 +32,7 @@ Caveats that must travel with these numbers: three videos, one channel, tiny
 subscriber base, no controlled comparison, and the subjects differ as much as
 the shapes do. Nigeria may lead because it is Nigeria.
 
-## EthniAfrica — LinkedIn
+## Reference project — LinkedIn
 
 | Post type | Count | Clicks produced |
 | --- | --- | --- |
