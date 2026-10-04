@@ -14,6 +14,7 @@ without being rediscovered.
 | Pattern | Status | Mechanism in one line |
 | --- | --- | --- |
 | [zeigarnik-open-loop](zeigarnik-open-loop.md) | observed | An unfinished story creates a tension the mind acts to resolve |
+| [kuleshov-montage](kuleshov-montage.md) | borrowed | Two clips side by side make a meaning neither holds alone — the montage argues without a word |
 
 ## Status values
 
