@@ -114,3 +114,13 @@ test("loadPack feeds renderGuidePrompt without further wiring", () => {
   assert.ok(prompt.includes("Fjellvik Cycles"));
   assert.ok(prompt.includes("=== FILE: idea.json ==="));
 });
+
+for (const pack of ["idea", "structure-carousel", "structure-image", "structure-reel", "audience-audit", "content-strategist"]) {
+  test(`${pack}: SKILL.md and studio.md state that headings stay as in the templates`, () => {
+    for (const file of ["SKILL.md", "studio.md"]) {
+      const text = readFileSync(join(skillsDir, pack, file), "utf8");
+      assert.match(text, /fixed identifiers/, `${pack}/${file}`);
+      assert.match(text, /exactly as written/, `${pack}/${file}`);
+    }
+  });
+}

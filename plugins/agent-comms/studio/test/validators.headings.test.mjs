@@ -7,7 +7,7 @@ import { validateIdeaMd } from "../validators/idea.mjs";
 import { validateAudienceReport, validateStrategy } from "../validators/strategy.mjs";
 import { validateCaptions } from "../validators/carousel.mjs";
 import { renderGuidePrompt } from "../render-guide-prompt.mjs";
-import { pluginDir, readFixture, studioDir } from "./helpers.mjs";
+import { readFixture, studioDir } from "./helpers.mjs";
 
 const fixture = (...path) => readFileSync(join(studioDir, "fixtures", ...path), "utf8");
 
@@ -112,13 +112,3 @@ test("the guide prompt wrapper says headings are fixed identifiers and only the 
   assert.match(prompt, /exactly as written in the deliverable templates/);
   assert.match(prompt, /only the text under a heading is written in the profile's language/i);
 });
-
-for (const pack of ["idea", "structure-carousel", "structure-image", "structure-reel", "audience-audit", "content-strategist"]) {
-  test(`${pack}: SKILL.md and studio.md state that headings stay as in the templates`, () => {
-    for (const file of ["SKILL.md", "studio.md"]) {
-      const text = readFileSync(join(pluginDir, "skills", pack, file), "utf8");
-      assert.match(text, /fixed identifiers/, `${pack}/${file}`);
-      assert.match(text, /exactly as written/, `${pack}/${file}`);
-    }
-  });
-}
