@@ -91,7 +91,7 @@ export function acceptedHeadings(heading) {
 function locateHeading(markdown, heading) {
   const { level } = splitHeading(heading);
   const spellings = acceptedHeadings(heading);
-  const exact = spellings.length === 1;
+  const exact = !(heading in HEADING_ALIASES);
   const wanted = new Set(spellings.map((spelling) => normaliseHeadingText(splitHeading(spelling).text)));
   const lines = markdown.split("\n");
   for (let index = 0; index < lines.length; index += 1) {
