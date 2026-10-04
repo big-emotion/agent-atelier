@@ -53,24 +53,36 @@ This is what carries a commentary-free compilation such as EthniAfrica's planned
 - **The reframe is a clip, not a line.** With no narrator to say it, beat 5 is
   the clip that makes the whole sequence read differently. Choose it first and
   build backwards from it.
-- **The cut sits on a completed thought.** Cutting a speaker off mid-sentence
-  reads as a gag (*Le Zapping*'s satirical register). For a sourced atlas, cut
-  on a full sentence and hold just long enough for the subtitle to be read.
+- **Two registers, two lengths.** Humour is assumed: a message often lands
+  better through laughter (operator ruling, 2026-10-04). A gag clip is short and
+  cut on its punchline. A serious clip runs longer and is cut at the end of a
+  sentence, held until the subtitle has been read. A montage that is all gags
+  never earns its serious beat, so it needs both.
+- **Measured on *Le Zapping* itself** (operator's sample, 2026-10-05, 1-second
+  precision). In a fan compilation (« Moments drôles et/ou insolites du Zapping
+  de Canal+, Partie 2 », YouTube, uploader Valéral), clips ran 7, 11, 14, 19, 20,
+  22, 25, 25 and 41 s, median about 20 s, with a ~1 s burst of TV snow between
+  them. In a 1998 weekly edition that followed in the same recording: 35, 16
+  and 14+ s. Gags ran 7–14 s. The clips that ran 25–41 s were situations that
+  build: a debate, a talk show. A compilation may have been re-cut by its
+  uploader, so the weekly edition is the closer reference.
 
 ## The fork
 
 The power to argue without saying anything is also the power to make a speaker
 say what they never meant. Kuleshov's experiment shows exactly that: the face did
-not change, only what surrounded it. *Le Zapping* used this openly, for satire,
-and its audience knew it was watching an editorial voice. A sourced atlas has no
-such cover. Its reader assumes the clips are evidence.
+not change, only what surrounded it.
+
+**Adding a meaning is the point of the format, and it is assumed** (operator
+ruling, 2026-10-04): a clip may take on a sense from what surrounds it, and the
+register may be mocking. The fork lies further on, at reversal and at
+falsification.
 
 Our rules:
 
-1. **Never put a clip where it implies the opposite of what its speaker meant
-   in the original.** Placing a clip next to another may add a meaning. It may
-   not reverse the clip's own meaning. Test: could the speaker watch the cut and
-   recognise their own point?
+1. **Adding a meaning is allowed, reversing one is not.** A clip may say more
+   because of its neighbour. It may not be cut so that its speaker appears to
+   say the opposite of what they said.
 2. **What the sequence implies must rest on a source**, exactly as a sentence
    would. If the project could not write the message as a sourced claim, it
    cannot imply it either. Implication does not let a claim skip the source
@@ -79,11 +91,11 @@ Our rules:
    plays.** The viewer must be able to tell an archive from today's footage,
    and a speaker in 1962 from one in 2024. Dropping the date is how putting two
    clips side by side turns into falsifying one.
-4. **No mockery of the people shown.** *Le Zapping* stressed absurdity. When the
-   subject is how a people was named, a montage that laughs at a speaker from
-   that people is contempt, and contempt does not get shared. Point the
-   absurdity at the act of naming and at whoever imposed the name, never at
-   whoever bears it.
+4. **Mockery is allowed; aiming it is a decision.** *Le Zapping* stressed
+   absurdity, and the format keeps that register. Choose its target on purpose:
+   absurdity aimed at an act of naming or at whoever imposed a name serves the
+   message. Absurdity aimed at a people for being who they are is contempt, and
+   contempt does not get shared.
 5. **The message sentence is written down even though it is never shown.**
    That sentence is what the editorial review checks. A montage whose message
    nobody wrote cannot be checked, and a message nobody can check is the
