@@ -77,7 +77,7 @@ const IDEA_SECTIONS = [
 
 export function validateIdeaMd(text) {
   const problems = requireHeadings(text, IDEA_SECTIONS);
-  if (!/^# \S/m.test(text)) problems.push('Missing the working title ("# <title>").');
+  if (!/^# \S/m.test(text)) problems.push('Missing the working title ("# <title>") at the top. (Il manque le titre de travail, sur la première ligne : "# <titre>".)');
   const promise = sectionBody(text, "## Promise");
   if (promise && splitSentences(promise).length !== 1) problems.push('The "Promise" section must be exactly one sentence.');
   return [...problems, ...validateChoicesSection(text)];

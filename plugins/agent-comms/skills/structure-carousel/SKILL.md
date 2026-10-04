@@ -9,6 +9,8 @@ metadata:
 
 # Structure (carousel)
 
+> **Headings are fixed.** Section headings are fixed identifiers: copy them exactly as written in the deliverable templates (English, with the same hash marks), whatever the language of the profile. Only the text under a heading is written in the profile's language.
+
 Turns `idea.md` and `idea.json` into everything the render step needs. It writes
 words and picks image titles; it does **not** render, redesign a layout or read
 a licence.

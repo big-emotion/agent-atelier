@@ -1,6 +1,8 @@
 import {
   isNonEmptyString,
   parseJson,
+  hasHeading,
+  missingSectionMessage,
   requireHeadings,
   validateChoicesSection,
 } from "./common.mjs";
@@ -23,21 +25,31 @@ const REPORT_SECTIONS = [
 
 export function validateAudienceReport(text) {
   const problems = requireHeadings(text, REPORT_SECTIONS);
-  if (!/^# Audience audit — \d{4}-\d{2}-\d{2}\s*$/m.test(text)) {
-    problems.push('Missing the dated title ("# Audience audit — YYYY-MM-DD").');
+  if (!/^# (Audience audit|Audit d['’]audience) [—–-] \d{4}-\d{2}-\d{2}\s*$/m.test(text)) {
+    problems.push(
+      'Missing the dated title ("# Audience audit — YYYY-MM-DD", or "# Audit d\'audience — YYYY-MM-DD"). (Il manque le titre daté : garde le format du prompt.)',
+    );
   }
   // Consent-gated analytics undercount; the downstream strategist must never read the figure as the audience.
-  if (!/\bfloor\b/i.test(text)) problems.push('The report must say the measured figure is a floor, not the audience.');
-  if (!/^### For content-strategist\s*$/m.test(text)) problems.push('Missing the handoff "### For content-strategist".');
+  if (!/\b(floor|plancher)\b/i.test(text)) {
+    problems.push('The report must say the measured figure is a floor ("plancher"), not the audience. (Dis que le chiffre mesuré est un plancher, pas l\'audience.)');
+  }
+  if (!hasHeading(text, "### For content-strategist")) problems.push(missingSectionMessage("### For content-strategist"));
   return [...problems, ...validateChoicesSection(text)];
 }
 
 export function validateStrategy(text) {
   const problems = requireHeadings(text, ["## Plan", "## Not collected this run"]);
-  const date = dateOf(text, /^# Content strategy — (\d{4}-\d{2}-\d{2})\s*$/m);
-  const reportDate = dateOf(text, /^Audit report: (\d{4}-\d{2}-\d{2})\s*$/m);
-  if (!date) problems.push('Missing the dated title ("# Content strategy — YYYY-MM-DD").');
-  if (!reportDate) problems.push('Missing the line "Audit report: YYYY-MM-DD".');
+  const date = dateOf(text, /^# (?:Content strategy|Strat[ée]gie de contenu) [—–-] (\d{4}-\d{2}-\d{2})\s*$/m);
+  const reportDate = dateOf(text, /^(?:Audit report|Rapport d['’]audit) ?: (\d{4}-\d{2}-\d{2})\s*$/m);
+  if (!date) {
+    problems.push(
+      'Missing the dated title ("# Content strategy — YYYY-MM-DD", or "# Stratégie de contenu — YYYY-MM-DD"). (Il manque le titre daté : garde le format du prompt.)',
+    );
+  }
+  if (!reportDate) {
+    problems.push('Missing the line "Audit report: YYYY-MM-DD", or "Rapport d\'audit : YYYY-MM-DD". (Il manque la ligne de la date du rapport d\'audit.)');
+  }
   if (date && reportDate && daysBetween(reportDate, date) > MAX_REPORT_AGE_DAYS) {
     problems.push(`The audit report is older than ${MAX_REPORT_AGE_DAYS} days: run the audience step again first.`);
   }

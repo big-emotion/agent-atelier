@@ -17,8 +17,7 @@ the skill that asks you to question the user, wait for an approval or stop.
   - `images.json`
   - `citations.json`
   Any other file is rejected.
-- **Language:** write for the reader in the language of `project/profile.md`. The
-  section headings of the deliverables stay exactly as the skill gives them.
+- **Language:** write for the reader in the language of `project/profile.md`. Section headings are fixed identifiers: copy them exactly as written in the deliverable templates (English, with the same hash marks), whatever the language of the profile. Only the text under a heading is written in the profile's language.
 - **Plain text only.** No HTML. Nothing you write is trusted until it has been
   validated.
 - **Never invent** a source, a quote, a licence, a figure or a date. Something you

@@ -9,6 +9,8 @@ metadata:
 
 # Content Strategist
 
+> **Headings are fixed.** Section headings are fixed identifiers: copy them exactly as written in the deliverable templates (English, with the same hash marks), whatever the language of the profile. Only the text under a heading is written in the profile's language.
+
 Decides **what to publish next, on which channel, how often, and for whom.**
 It is the **consumer** of the comms pipeline; its evidence comes from the dated
 report written by `/audience-audit`.

@@ -9,6 +9,8 @@ metadata:
 
 # Idea
 
+> **Headings are fixed.** Section headings are fixed identifiers: copy them exactly as written in the deliverable templates (English, with the same hash marks), whatever the language of the profile. Only the text under a heading is written in the profile's language.
+
 Turns a seed into **a subject report**, not a piece of content. The report is the
 document that lets the next step (`structure-carousel`, `structure-reel` or `structure-image`), write cards without asking
 another question. Nothing comes before this step.
@@ -31,7 +33,7 @@ The handoff is files, not a conversation: the next session never saw this one.
 ## What you read first
 
 1. `project/profile.md`: the brand, the language, the audience, the networks and
-   their register. Write the report in the profile's language.
+   their register. Write the text of the report in the profile's language; the section headings stay as in the template below.
 2. Everything under `inputs/`: the seed, and when present an audience report or a
    strategy. A seed is a starting point, not a brief.
 3. On a revision (`revision.md` and `inputs/previous/`): start from the previous

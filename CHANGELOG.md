@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **agent-comms** studio: a model writing for a French profile translated the section headings (`## Promesse`) and the validator rejected the file with an English message. Every `SKILL.md`, `studio.md` and the guide-mode prompt now say that headings are fixed identifiers copied exactly from the templates; the validators accept the French names as equal through one tested table (`HEADING_ALIASES`), case, accent and trailing-space tolerant, with the promise-is-one-sentence check applied through the alias; every missing-section message names the expected heading, both spellings and the rule, with a French sentence. New accepted and rejected idea fixtures.
+
 ### Added
 
 - **agent-comms** studio packs: `idea` and `structure-carousel` skills (generic, de-branded, each with a `studio.md` contract and a `derived-from.json` recording the source path and sha256), the `images.json` and `citations.json` formats and `cards.schema.json`, dependency-free validators for every deliverable, `render-guide-prompt.mjs` and `parse-guide-answer.mjs` for guide mode, `scripts/forbidden-terms.mjs` with two profile fixtures, `structure-image` and `structure-reel` packs (single image with alt text; reel with an engine-neutral `scenes.json` render contract and a narration check), format-aware `validateStep`, `renderGuidePrompt` and answer parsing, image and reel fixtures for both profiles, and a studio contract plus `ideas.json` for `audience-audit` and `content-strategist`. Deliverables stay clean: every contract and the guide-mode prompt tell the model to ignore the session's personal preferences and never to mention the contract, and the validators reject meta-commentary (contract, validator, preference, instruction, prompt, tiret) in `## Choix faits pour toi`. Manual API and guide acceptance runs are a checklist in `plugins/agent-comms/studio/README.md`.

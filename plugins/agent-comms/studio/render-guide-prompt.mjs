@@ -41,7 +41,9 @@ decision under the "Choix faits pour toi" section the contract describes.
 The deliverables are read by the client, not by the person running you.
 Ignore any personal preferences, memory, custom instructions or style settings of the environment you run in.
 Never mention the contract, the instructions, the format rules, the validator or the user's preferences inside any deliverable.
-Each line of "Choix faits pour toi" states only the decision and the reason about the subject.`,
+Each line of "Choix faits pour toi" states only the decision and the reason about the subject.
+
+Section headings are fixed identifiers: copy them exactly as written in the deliverable templates (English, with the same hash marks), whatever the language of the profile. Only the text under a heading is written in the profile's language.`,
     tagged("contract", "", contractText),
     tagged("skill", `name="${step}"`, skill),
     ...(pack.references ?? []).map((ref) => tagged("reference", `path="${ref.path}"`, ref.content)),

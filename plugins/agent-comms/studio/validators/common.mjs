@@ -37,24 +37,99 @@ export function parseJson(text, label) {
   }
 }
 
-const headingLine = (heading) => new RegExp(`^${heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "m");
+// Section headings are identifiers the client looks up, not prose. The packs
+// tell the model to copy them exactly; a model writing for a French profile
+// translates them anyway, so each English heading also accepts its French name.
+// Keys carry the hash marks, values are the plain French alternatives. The
+// choices heading is absent on purpose: it is already French and stays as is.
+// The portal's French labels (piece/markdown-document) draw on the same names.
+export const HEADING_ALIASES = {
+  "## Question": ["Question"],
+  "## Angle": ["Angle"],
+  "## Promise": ["Promesse"],
+  "## What this piece will not say": ["Ce que cette pièce ne dira pas", "Ce que ce contenu ne dira pas"],
+  "## Sources": ["Sources"],
+  "## Reservations": ["Réserves", "Réservations"],
+  "## Headline": ["En bref"],
+  "## Acquisition": ["Acquisition"],
+  "## Devices": ["Appareils"],
+  "## Page verdicts": ["Verdicts par page"],
+  "## Coverage": ["Couverture"],
+  "## Findings": ["Constats"],
+  "## Handoffs": ["Transmissions"],
+  "### For content-strategist": ["Pour content-strategist"],
+  "## Plan": ["Plan"],
+  "## Not collected this run": ["Non collecté lors de cette exécution", "Non collecté cette fois"],
+  "## Images": ["Images"],
+  "## Claims": ["Affirmations"],
+};
 
-export const hasHeading = (markdown, heading) => headingLine(heading).test(markdown);
+const normaliseHeadingText = (text) =>
+  text
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+
+const splitHeading = (heading) => {
+  const [, hashes, text] = /^(#+)\s+(.*)$/.exec(heading);
+  return { level: hashes.length, text };
+};
+
+// The canonical heading first, then its French alternatives, all with the hash marks.
+export function acceptedHeadings(heading) {
+  const hashes = "#".repeat(splitHeading(heading).level);
+  return [heading, ...(HEADING_ALIASES[heading] ?? []).map((alias) => `${hashes} ${alias}`)];
+}
+
+// Heading lines of a document with their level and line index. Case, accents and
+// spacing are tolerated for the aliased headings; any other heading is compared
+// verbatim (but for trailing spaces), so the choices heading cannot drift.
+function locateHeading(markdown, heading) {
+  const { level } = splitHeading(heading);
+  const spellings = acceptedHeadings(heading);
+  const exact = spellings.length === 1;
+  const wanted = new Set(spellings.map((spelling) => normaliseHeadingText(splitHeading(spelling).text)));
+  const lines = markdown.split("\n");
+  for (let index = 0; index < lines.length; index += 1) {
+    const found = /^(#{1,6})\s+(.*?)\s*$/.exec(lines[index]);
+    if (!found || found[1].length !== level) continue;
+    const matches = exact ? `${found[1]} ${found[2]}` === heading : wanted.has(normaliseHeadingText(found[2]));
+    if (matches) return { lines, index, level };
+  }
+  return null;
+}
+
+export const hasHeading = (markdown, heading) => locateHeading(markdown, heading) !== null;
 
 // Body of a section, up to the next heading of the same or a higher level.
 export function sectionBody(markdown, heading) {
-  const match = headingLine(heading).exec(markdown);
-  if (!match) return null;
-  const level = heading.match(/^#+/)[0].length;
-  const rest = markdown.slice(match.index + match[0].length);
-  const next = new RegExp(`^#{1,${level}}\\s`, "m").exec(rest);
-  return (next ? rest.slice(0, next.index) : rest).trim();
+  const located = locateHeading(markdown, heading);
+  if (!located) return null;
+  const { lines, index, level } = located;
+  const rest = lines.slice(index + 1);
+  const next = rest.findIndex((line) => new RegExp(`^#{1,${level}}\\s`).test(line));
+  return (next === -1 ? rest : rest.slice(0, next)).join("\n").trim();
+}
+
+// Actionable: the heading expected, every accepted spelling, and the rule that
+// headings are copied from the prompt, whatever the language of the text.
+export function missingSectionMessage(heading) {
+  const [expected, ...alternatives] = acceptedHeadings(heading);
+  const quoted = (value) => `"${value}"`;
+  const alsoEn = alternatives.length > 0 ? ` (also accepted: ${alternatives.map(quoted).join(" or ")})` : "";
+  const name = splitHeading(expected).text;
+  const frenchName = alternatives.length > 0 ? splitHeading(alternatives[0]).text : name;
+  const alsoFr =
+    alternatives.length > 0
+      ? `, en anglais : ${quoted(expected)} ; la version française ${quoted(alternatives[0])} est aussi acceptée`
+      : `, tel quel : ${quoted(expected)}`;
+  return `Missing section ${quoted(expected)}${alsoEn}. Keep the heading exactly as written in the prompt, with its hash marks; only the text under it is in the profile's language. (Il manque la section « ${frenchName} ». Garde les titres exactement comme dans le prompt${alsoFr}.)`;
 }
 
 export function requireHeadings(markdown, headings) {
-  return headings
-    .filter((heading) => !hasHeading(markdown, heading))
-    .map((heading) => `Missing section "${heading}".`);
+  return headings.filter((heading) => !hasHeading(markdown, heading)).map(missingSectionMessage);
 }
 
 // The choices are read by the client. A model running in someone's own session
@@ -68,7 +143,7 @@ const META_WORD = /(?<![\p{L}])(contrats?|contracts?|validateurs?|validators?|pr
 export function validateChoicesSection(markdown) {
   const lines = markdown.split("\n");
   const start = lines.findIndex((line) => line.trim() === CHOICES_HEADING);
-  if (start === -1) return [`Missing section "${CHOICES_HEADING}".`];
+  if (start === -1) return [missingSectionMessage(CHOICES_HEADING)];
   const end = lines.findIndex((line, i) => i > start && /^#{1,2}\s/.test(line));
   const section = lines.slice(start + 1, end === -1 ? lines.length : end);
   const bullets = section

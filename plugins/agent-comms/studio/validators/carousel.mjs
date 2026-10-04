@@ -3,6 +3,7 @@ import {
   plainLanguageProblems,
   CHOICES_HEADING,
   hasHeading,
+  missingSectionMessage,
   isHttpUrl,
   isNonEmptyString,
   parseJson,
@@ -200,6 +201,6 @@ export function validateCaptions(text, ctx = {}) {
       problems.push(`The ${network} caption is ${section.body.length} characters, the limit is ${limit}.`);
     }
   }
-  if (!hasHeading(text, CHOICES_HEADING)) return [...problems, `Missing section "${CHOICES_HEADING}".`];
+  if (!hasHeading(text, CHOICES_HEADING)) return [...problems, missingSectionMessage(CHOICES_HEADING)];
   return [...problems, ...validateChoicesSection(text)];
 }

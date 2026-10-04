@@ -9,6 +9,8 @@ metadata:
 
 # Structure (reel)
 
+> **Headings are fixed.** Section headings are fixed identifiers: copy them exactly as written in the deliverable templates (English, with the same hash marks), whatever the language of the profile. Only the text under a heading is written in the profile's language.
+
 Turns `idea.md` and `idea.json` into a scene-by-scene reel plan the render side can
 consume. It writes the script and the shot list; it does **not** voice, time,
 render or read a licence.

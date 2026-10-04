@@ -72,6 +72,25 @@ with its line number, in every deliverable that carries the section. Only that
 section is scanned, so the same words stay legitimate elsewhere. A real leaked answer
 is kept as `fixtures/rejected/idea-meta-leak.md`.
 
+### Section headings
+
+Headings are identifiers the client looks up, so every `studio.md`, every `SKILL.md` and
+the guide-mode wrapper say once that they are copied exactly as written in the
+deliverable templates (English, same hash marks) and only the text under them is in the
+profile's language. A model writing French translates them anyway (a real run returned
+`## Promesse` and was rejected), so the validators accept the French names as equal:
+`HEADING_ALIASES` in `validators/common.mjs` is the one table (for example `## Promise`
+= `## Promesse`, `## What this piece will not say` = `## Ce que cette pièce ne dira pas`
+or `## Ce que ce contenu ne dira pas`, `## Reservations` = `## Réserves`), matched
+regardless of case, accents and trailing spaces, at the same heading level. Cross-checks
+(the promise is one sentence) go through the alias. The dated titles of the audit report
+and the strategy, and the word "floor" (`plancher`), have French forms too.
+`## Choix faits pour toi` is never aliased: it must be written as is. A missing section
+is reported with the heading expected, both spellings, the rule to keep it as in the
+prompt, and a French sentence. Fixtures: `fixtures/accepted/idea-french-headings.md`
+validates, `fixtures/rejected/idea-missing-promise.md` is refused for a truly missing
+section.
+
 ### Declared limits
 
 - The validators check **shape and the rules that can be checked without a model**

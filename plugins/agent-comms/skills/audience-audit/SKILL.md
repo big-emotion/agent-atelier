@@ -9,6 +9,8 @@ metadata:
 
 # Audience Audit
 
+> **Headings are fixed.** Section headings are fixed identifiers: copy them exactly as written in the deliverable templates (English, with the same hash marks), whatever the language of the profile. Only the text under a heading is written in the profile's language.
+
 Measures the audience, classifies the pages, writes one dated report. It is the
 **producer** of the comms pipeline:
 
