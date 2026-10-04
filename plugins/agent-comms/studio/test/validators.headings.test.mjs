@@ -69,11 +69,17 @@ test("a truly missing section says the heading expected, both spellings and to k
   assert.match(problem, /Il manque la section « Promesse »/);
 });
 
+test("a heading spelled the same in both languages is not offered as its own alternative", () => {
+  assert.deepEqual(acceptedHeadings("## Sources"), ["## Sources"]);
+  assert.deepEqual(acceptedHeadings("## Question"), ["## Question"]);
+});
+
 test("a missing section without a French alias still tells the author to keep the heading", () => {
   const text = fixture("accepted", "idea-french-headings.md").replace("## Sources", "## Bibliographie");
   const [problem] = validateIdeaMd(text);
   assert.match(problem, /^Missing section "## Sources"/);
   assert.match(problem, /exactly as written in the prompt/i);
+  assert.ok(!problem.includes("also accepted"), problem);
 });
 
 test("every heading of the reference idea.md, audit report and strategy validates once translated", () => {

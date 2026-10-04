@@ -77,10 +77,12 @@ const splitHeading = (heading) => {
   return { level: hashes.length, text };
 };
 
-// The canonical heading first, then its French alternatives, all with the hash marks.
+// The canonical heading first, then its French alternatives (those that differ from it), all with the hash marks.
 export function acceptedHeadings(heading) {
   const hashes = "#".repeat(splitHeading(heading).level);
-  return [heading, ...(HEADING_ALIASES[heading] ?? []).map((alias) => `${hashes} ${alias}`)];
+  const sameAsCanonical = normaliseHeadingText(splitHeading(heading).text);
+  const alternatives = (HEADING_ALIASES[heading] ?? []).filter((alias) => normaliseHeadingText(alias) !== sameAsCanonical);
+  return [heading, ...alternatives.map((alias) => `${hashes} ${alias}`)];
 }
 
 // Heading lines of a document with their level and line index. Case, accents and
