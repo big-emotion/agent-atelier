@@ -1,0 +1,25 @@
+[
+  {
+    "title": "Ridge Line closure",
+    "format": "carousel",
+    "state": "published",
+    "networks": ["Instagram", "LinkedIn"],
+    "publishedAt": "2026-09-12",
+    "summary": "Explains the October closure as a drainage decision."
+  },
+  {
+    "title": "Hut water taps",
+    "format": "image",
+    "state": "published",
+    "networks": ["Instagram"],
+    "publishedAt": "2026-08-30",
+    "summary": "One picture and one claim about when the huts shut their taps."
+  },
+  {
+    "title": "First frost checklist",
+    "format": "reel",
+    "state": "draft",
+    "networks": ["Instagram"],
+    "summary": "A short checklist for the first frost."
+  }
+]

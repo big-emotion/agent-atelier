@@ -1,0 +1,22 @@
+{
+  "citations": [
+    {
+      "card": 2,
+      "claim": "Crews rebuild the culverts every October.",
+      "sourceUrl": "https://example.org/ridge-line/maintenance-plan",
+      "quote": "culverts are rebuilt each October"
+    },
+    {
+      "card": 3,
+      "claim": "Wet autumns delay the work.",
+      "sourceUrl": "https://example.org/ridge-line/maintenance-plan",
+      "quote": "persistent rain postpones the works"
+    },
+    {
+      "card": 4,
+      "claim": "Crews carry the stone up on foot.",
+      "sourceUrl": "https://example.org/ridge-line/maintenance-plan",
+      "quote": "stone is carried up by hand"
+    }
+  ]
+}

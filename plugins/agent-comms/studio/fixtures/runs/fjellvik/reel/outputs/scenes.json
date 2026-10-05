@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "campaign": "ridge-line-closure-reel",
+  "title": "The Ridge Line is not closed for snow",
+  "aspect": "9:16",
+  "scenes": [
+    {
+      "id": "s1",
+      "role": "hook",
+      "voiceover": "The Ridge Line is not closed for snow.",
+      "captionText": "Not closed for snow",
+      "source": "",
+      "shot": { "kind": "still", "imageId": "img-1", "identite": "A gravel track between birch trees in autumn light" }
+    },
+    {
+      "id": "s2",
+      "role": "body",
+      "voiceover": "Crews rebuild the culverts every October.",
+      "captionText": "Culverts rebuilt each October",
+      "source": "Ridge Line maintenance plan, section 2",
+      "shot": { "kind": "still", "imageId": "img-2", "identite": "A stone culvert passing under a mountain track" }
+    },
+    {
+      "id": "s3",
+      "role": "body",
+      "voiceover": "The route reopens when they finish.",
+      "captionText": "Reopens when the work ends",
+      "source": "Ridge Line maintenance plan, section 3",
+      "shot": { "kind": "textcard", "text": "Reopens when the work ends" }
+    },
+    {
+      "id": "s4",
+      "role": "closing",
+      "voiceover": "Check the dates before you ride.",
+      "captionText": "Check the dates",
+      "source": "",
+      "shot": { "kind": "textcard", "text": "Check the dates before you ride" }
+    }
+  ]
+}

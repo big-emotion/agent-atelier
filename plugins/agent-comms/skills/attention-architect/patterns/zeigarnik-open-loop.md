@@ -70,7 +70,7 @@ a hook, it is a provocation.
 
 ## Evidence in our own record
 
-EthniAfrica's YouTube channel, 16 subscribers, September 2026 — the widest gap
+The reference project's YouTube channel, 16 subscribers, September 2026 — the widest gap
 in the record, and it is a gap in structure, not in production quality:
 
 | Video | Loop opened? | Views |

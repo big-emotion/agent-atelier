@@ -1,0 +1,70 @@
+{
+  "campagne": "ridge-line-closure",
+  "cartes": [
+    {
+      "rang": 1,
+      "role": "ouverture",
+      "titre": "The Ridge Line is not closed for snow",
+      "chiffre": false,
+      "precision": "It closes for water",
+      "punchline": "",
+      "corps": "",
+      "source": "",
+      "image": { "id": "img-1", "identite": "A gravel track between birch trees in autumn light", "cadrage": "50% 40%" },
+      "paires": null,
+      "disposition": "auto"
+    },
+    {
+      "rang": 2,
+      "role": "contenu",
+      "titre": "Drainage work sets the dates",
+      "chiffre": false,
+      "precision": "",
+      "punchline": "",
+      "corps": "Crews rebuild the culverts every October. The route reopens when they finish.",
+      "source": "Ridge Line maintenance plan, section 2",
+      "image": { "id": "img-2", "identite": "A stone culvert passing under a mountain track" },
+      "paires": null,
+      "disposition": "auto"
+    },
+    {
+      "rang": 3,
+      "role": "contenu",
+      "titre": "Reopening depends on the rain",
+      "chiffre": false,
+      "precision": "",
+      "punchline": "",
+      "corps": "Wet autumns delay the work. A dry autumn lets the route reopen in November.",
+      "source": "Ridge Line maintenance plan, section 3",
+      "image": { "id": "img-2", "identite": "A stone culvert passing under a mountain track" },
+      "paires": null,
+      "disposition": "auto"
+    },
+    {
+      "rang": 4,
+      "role": "contenu",
+      "titre": "The work is done by hand",
+      "chiffre": false,
+      "precision": "",
+      "punchline": "",
+      "corps": "Machines cannot reach the upper section. Crews carry the stone up on foot.",
+      "source": "Ridge Line maintenance plan, section 4",
+      "image": { "id": "img-3", "identite": "Two workers placing stones on a mountain track" },
+      "paires": null,
+      "disposition": "auto"
+    },
+    {
+      "rang": 5,
+      "role": "bascule",
+      "titre": "Check the dates before you ride",
+      "chiffre": false,
+      "precision": "",
+      "punchline": "",
+      "corps": "The maintenance plan lists them.",
+      "source": "",
+      "image": { "id": "img-1", "identite": "A gravel track between birch trees in autumn light" },
+      "paires": null,
+      "disposition": "auto"
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "question": "Who decides when the Ridge Line reopens in spring, and on what check?",
+  "angle": "The snow belief is a rider's account; the record names one signature after one inspection.",
+  "promise": "You will know what riders believe and what the record shows about the reopening.",
+  "audience": "Riders planning a spring trip",
+  "hook": {
+    "text": "Riders say the snow decides. The record names a signature.",
+    "payoff": "Steps 1 and 2 set the belief against the documented check."
+  },
+  "wontSay": [
+    "That the 2026 date can be predicted",
+    "That snow never delays the sign-off"
+  ],
+  "sources": [
+    {
+      "title": "Council minutes, 12 March 2019",
+      "url": "https://example.org/ridge-line/council-minutes-2019",
+      "supports": "the drainage engineer signs the reopening after an inspection"
+    },
+    {
+      "title": "Ridge Line maintenance plan",
+      "url": "https://example.org/ridge-line/maintenance-plan",
+      "supports": "the inspection is a drainage check"
+    },
+    {
+      "title": "Reopening log 2016-2025",
+      "url": "https://example.org/ridge-line/reopening-log",
+      "supports": "one reopening date per year, without causes"
+    },
+    {
+      "title": "Rider forum thread",
+      "url": "https://example.org/ridge-line/rider-forum-thread",
+      "supports": "riders say the route reopens when the snow melts"
+    }
+  ],
+  "reservations": [
+    "The log stops at 2025.",
+    "The forum thread is a rider's account, not an official source."
+  ],
+  "formats": [
+    "carousel"
+  ],
+  "networks": [
+    "Instagram",
+    "LinkedIn"
+  ],
+  "basis": "exploratory",
+  "basisReason": "No comparable spring piece has been published yet.",
+  "chosen": {
+    "proposalId": "p1",
+    "kind": "chosen",
+    "note": "Mix 1 and 3: open on the snow belief, then show the engineer's sign-off."
+  },
+  "plan": [
+    {
+      "n": 1,
+      "title": "The snow belief",
+      "goal": "Pose the rider belief that the snow decides, so the question is clear.",
+      "sources": [
+        "https://example.org/ridge-line/rider-forum-thread"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "What the plan checks",
+      "goal": "Show that the plan names a drainage inspection as the check.",
+      "sources": [
+        "https://example.org/ridge-line/maintenance-plan"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "Who signs",
+      "goal": "Name the engineer's sign-off as recorded in the council minutes.",
+      "sources": [
+        "https://example.org/ridge-line/council-minutes-2019"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Ten springs on record",
+      "goal": "Show the logged dates without explaining any single year.",
+      "sources": [
+        "https://example.org/ridge-line/reopening-log"
+      ]
+    },
+    {
+      "n": 5,
+      "title": "What we cannot tell yet",
+      "goal": "Say that 2026 is undocumented and invite riders to share the dates they know.",
+      "sources": []
+    }
+  ],
+  "beforeWriting": [
+    "Open the council minutes and confirm the sign-off wording.",
+    "Find out whether the logged 2020 date was a delay or a plan."
+  ]
+}

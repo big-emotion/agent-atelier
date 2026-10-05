@@ -23,7 +23,7 @@ Speech/text split: "Rio dos Camarões" is SHOWN, not spoken — the voice
 collapses it toward the French form and the etymology dies silently.
 
 Closing line: subject class = place name → « Retrouve l'histoire de chaque
-pays sur EthniAfrica » (never « chaque peuple » on a toponym episode).
+pays sur le site » (never « chaque peuple » on a toponym episode).
 ```
 
 Run it with `--critique` on a piece that underperformed, and it walks the beats in order and reports the *first* one that fails — attention leaks forward, so a broken beat 1 makes beats 2–6 unmeasurable.
@@ -97,3 +97,41 @@ already has the audience a new page would have to earn.
 Not collected this session: one platform stalled on bot detection.
 Recorded empty, NOT zero.
 ```
+
+## [`idea`](idea/SKILL.md)
+
+Turns a seed into a subject report: the question, the angle, a one-sentence promise, what the piece will not say, its sources and its reservations. A hook the sources cannot pay off is refused as bait.
+
+```
+/agent-comms:idea Why does the Ridge Line route close every October?
+```
+
+Writes `idea.md` and `idea.json`. Inside a content studio it never asks and never blocks: it picks the proposal the evidence best supports and lists every decision under `## Choix faits pour toi`.
+
+## [`structure-carousel`](structure-carousel/SKILL.md)
+
+Turns an approved subject report into a sourced carousel: card copy, a caption per network, sources, Wikimedia Commons image titles and the exact quotes behind each claim.
+
+```
+/agent-comms:structure-carousel inputs/idea.json
+```
+
+Writes `cards.json`, `captions.md`, `sources.md`, `images.json` and `citations.json`. Cover title of eight words or fewer, sentences of twenty words at most, subject before reference, a source on every claim. It never reads a licence: the server does, from Commons.
+
+## [`structure-image`](structure-image/SKILL.md)
+
+Turns an approved subject report into a single sourced image post: an image brief (title, at most two sentences, the Commons picture, alt text), a caption per network, the sources and the quote behind the claim.
+
+```
+/agent-comms:structure-image inputs/idea.json
+```
+
+## [`structure-reel`](structure-reel/SKILL.md)
+
+Turns an approved subject report into a scene-by-scene reel plan: voice-over, caption text, a Commons still or a text card per scene, the full narration, captions per network, sources and quotes. `scenes.json` is an engine-neutral contract: what is said and shown, never how.
+
+```
+/agent-comms:structure-reel inputs/idea.json
+```
+
+The packs, and the studio contract the other two skills now follow, are described in the [studio kit](../studio/README.md).

@@ -1,6 +1,6 @@
 ---
 name: attention-architect
-description: Attention and persuasion counterpart for Big Emotion's short-form video and social copy, across every project (EthniAfrica, Big Emotion, and the next one). Turns a subject into an approvable narrated script — hook, open loop, retention beats, reframe, call to action — and names the mechanism behind every choice together with the line it must not cross. Also keeps a growing ledger of persuasion principles: hand it a screenshot, a link, a post or a video and it files the principle so the next script inherits it. Stops before technical production (voice, captions, render, publication). Use for "écris une vidéo", "trouve-moi une accroche", "un hook", "pourquoi cette vidéo ne retient pas", "comment capter l'attention", "boucle ouverte", "cette vidéo est plate", "note ce principe", "ajoute ça au cerveau", "que dit ce post", or /attention-architect.
+description: Attention and persuasion counterpart for Big Emotion's short-form video and social copy, across every project (Big Emotion's own projects and the next one). Turns a subject into an approvable narrated script — hook, open loop, retention beats, reframe, call to action — and names the mechanism behind every choice together with the line it must not cross. Also keeps a growing ledger of persuasion principles: hand it a screenshot, a link, a post or a video and it files the principle so the next script inherits it. Stops before technical production (voice, captions, render, publication). Use for "écris une vidéo", "trouve-moi une accroche", "un hook", "pourquoi cette vidéo ne retient pas", "comment capter l'attention", "boucle ouverte", "cette vidéo est plate", "note ce principe", "ajoute ça au cerveau", "que dit ce post", or /attention-architect.
 metadata:
   author: Big Emotion
   version: "1.0.0"
@@ -48,7 +48,7 @@ Read `references/doctrine.md` before writing or judging any script. Read
 It produces **an approved script and its source map. Nothing downstream.**
 
 No voice generation, no caption rendering, no timeline, no export, no
-publication. Those are the project's production reference, and on EthniAfrica
+publication. Those are the project's production reference, and on the reference project
 that reference is already written and explicitly frozen — do not redesign it
 from here.
 
@@ -95,7 +95,7 @@ Three refusals, non-negotiable, in any project:
 - **Never promise what the source cannot state.** If the dossier declares a
   figure unknowable, the script does not invent one to land a beat.
 - **Never let rhetoric graduate into a sourced claim.** The most quoted
-  sentence in the best-loved EthniAfrica script is editorial emphasis, not a
+  sentence in the best-loved script of the reference project is editorial emphasis, not a
   historical finding, and it is labelled as such in the production memory.
   Reusing it as fact in the next script is how a brand loses the thing it sells.
 

@@ -1,0 +1,98 @@
+{
+  "question": "D'où vient le pigment du bleu de la collection d'automne, et que sait-on de sa route ?",
+  "audience": "Lectrices qui se demandent d'où vient la couleur",
+  "wontSay": [
+    "L'origine exacte du pigment",
+    "Qu'aucune plante locale n'entre dans la teinture"
+  ],
+  "sources": [
+    {
+      "title": "Fiche du fournisseur de pigment",
+      "url": "https://example.org/atelier/fiche-fournisseur",
+      "supports": "le pigment est importé, son origine exacte n'est pas détaillée"
+    },
+    {
+      "title": "Registre de l'atelier de teinture, 2019-2025",
+      "url": "https://example.org/atelier/registre-teintures",
+      "supports": "un lot de pigment par saison, sans origine"
+    },
+    {
+      "title": "Fil de discussion de lectrices",
+      "url": "https://example.org/forum/fil-couleur-indigo",
+      "supports": "des lectrices parlent d'une teinture végétale locale"
+    },
+    {
+      "title": "Guide d'entretien des textiles",
+      "url": "https://example.org/guide-textiles/indigo",
+      "supports": "le bleu indigo déteint aux lavages chauds"
+    }
+  ],
+  "reservations": [
+    "La fiche du fournisseur date de 2023.",
+    "Le fil de discussion est un témoignage, pas une source officielle."
+  ],
+  "formats": [
+    "reel"
+  ],
+  "networks": [
+    "TikTok",
+    "Instagram"
+  ],
+  "basis": "exploratory",
+  "basisReason": "Aucune pièce comparable sur l'origine d'une couleur n'a encore été publiée.",
+  "beforeWriting": [
+    "Ouvrir la fiche du fournisseur et confirmer la mention de l'import.",
+    "Vérifier si le registre de l'atelier cite le lot de cet automne."
+  ],
+  "angle": "L'idée d'une teinture locale repose sur un fil de discussion ; la fiche du fournisseur parle d'import.",
+  "promise": "Tu sauras ce que les lectrices croient et ce que la fiche du fournisseur établit.",
+  "hook": {
+    "text": "Une teinture locale ? Voyons ce que dit la fiche.",
+    "payoff": "Les étapes 1 à 3 confrontent l'idée reçue à la fiche du fournisseur."
+  },
+  "chosen": {
+    "proposalId": "p1",
+    "kind": "chosen",
+    "note": "Mélange la 1 et la 2 : ouvre sur l'idée reçue, puis montre ce que dit la fiche du fournisseur."
+  },
+  "plan": [
+    {
+      "n": 1,
+      "title": "L'idée des lectrices",
+      "goal": "Poser l'idée d'une teinture végétale locale telle que des lectrices la disent.",
+      "sources": [
+        "https://example.org/forum/fil-couleur-indigo"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Ce que dit la fiche",
+      "goal": "Montrer que la fiche parle d'un pigment importé.",
+      "sources": [
+        "https://example.org/atelier/fiche-fournisseur"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "Ce que la fiche ne dit pas",
+      "goal": "Dire que ni le pays ni le producteur ne figurent dans la fiche.",
+      "sources": [
+        "https://example.org/atelier/fiche-fournisseur"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Un lot par saison",
+      "goal": "Montrer que le registre note un lot de pigment par saison, sans origine.",
+      "sources": [
+        "https://example.org/atelier/registre-teintures"
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Ce qu'on cherche encore",
+      "goal": "Inviter les lectrices à partager ce qu'elles savent, sans promettre de réponse.",
+      "sources": []
+    }
+  ]
+}

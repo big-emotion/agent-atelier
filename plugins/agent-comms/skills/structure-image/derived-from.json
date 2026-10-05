@@ -1,0 +1,11 @@
+{
+  "sourceRepo": "source",
+  "description": "Generic, English, de-branded rewrite of the source material. The sha256 is the hash of the source file when it was last reconciled.",
+  "files": [
+    {
+      "pack": "SKILL.md",
+      "source": "source/structure/SKILL.md",
+      "sha256": "d1115b51082a2ff3705cc6d6d3fe3d32731b49c39071e81c726135a66429476f"
+    }
+  ]
+}

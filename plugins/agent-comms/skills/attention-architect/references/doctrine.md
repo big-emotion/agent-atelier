@@ -5,7 +5,7 @@ manual.** Every rule below points at a script that shipped and a number it
 produced. Where a rule rests on outside literature instead, it is filed in
 `patterns/` and cited as such.
 
-Source material: three EthniAfrica production memories and the eight approved or
+Source material: three production memories of the reference project and the eight approved or
 drafted narrations they contain, written between 2026-09-04 and 2026-09-07. The
 memories themselves stay in that project's own production directory; what
 transfers is recorded here.
@@ -22,7 +22,7 @@ it. That discomfort is the Zeigarnik effect — see
 
 Two consequences that decide most rewrites:
 
-- **A video with no debt has no retention floor.** The EthniAfrica channel
+- **A video with no debt has no retention floor.** The reference project's channel
   presentation opened no loop and took **13 views**, against 632–861 for the
   three shorts built on this shape, on the same channel in the same period.
   That is the widest measured gap in the record and it is not about production
@@ -82,7 +82,7 @@ feel worth fixing.
 
 ### d. The identity challenge
 
-> Fier d'être Bantu ? Mais « Bantu », ce n'est pas le nom d'une ethnie ou d'un peuple unique. C'est une étiquette créée par un linguiste européen.
+> Fier d'être Bantu ? Mais « Bantu », ce n'est pas le nom d'un groupe ou d'un peuple unique. C'est une étiquette créée par un linguiste européen.
 
 The strongest possible debt — it is the viewer's own self-description being
 contradicted — and the most dangerous. It only survives if the video hands
@@ -179,13 +179,13 @@ This only works if it is true. A manufactured hesitation is a manipulation.
 The closing line answers the question the hook raised. **It never changes the
 subject**, and it never generalises past what the episode was about.
 
-The measured rule on EthniAfrica: the closing line matches the **class of the
+The measured rule on the reference project: the closing line matches the **class of the
 subject**.
 
-- an ethnonym, a people's own name → *Retrouve-les sur EthniAfrica* / *chaque peuple*
-- a country or place name → *Retrouve l'histoire de chaque pays sur EthniAfrica*
+- a people's own name → *Retrouve-les sur le site* / *chaque peuple*
+- a country or place name → *Retrouve l'histoire de chaque pays sur le site*
 - neither → write the line the episode actually earned (*Retrouve les vraies
-  proportions de l'Afrique sur EthniAfrica*)
+  proportions de l'Afrique sur le site*)
 
 A closing line promising "chaque peuple" on an episode about a toponym is a
 small unpaid debt, and it accumulates across a series.
@@ -219,7 +219,7 @@ have already destroyed an argument.
 
 The device is universal; the vehicle is not.
 
-**Measured, EthniAfrica:** on LinkedIn, three video posts produced **zero
+**Measured on the reference project:** on LinkedIn, three video posts produced **zero
 clicks between them**, while two text posts produced **all** of the clicks. On
 that channel the loop is opened in the first line of text, above the fold, and
 the video is not the vehicle at all.

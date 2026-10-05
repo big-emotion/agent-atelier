@@ -36,3 +36,5 @@ jobs:
       - run: npm run check:templates
       - name: Validate marketplace and plugin manifests
         run: npm run check:manifests
+      - name: Check studio fixtures carry no foreign profile vocabulary
+        run: npm run check:forbidden-terms

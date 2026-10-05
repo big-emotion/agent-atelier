@@ -1,0 +1,26 @@
+{
+  "question": "Why does the Ridge Line route close every October?",
+  "angle": "The closure is a drainage decision, not a weather decision.",
+  "promise": "You will know what actually closes the route and when it reopens.",
+  "audience": "Riders planning an autumn trip",
+  "hook": {
+    "text": "The Ridge Line is not closed for snow.",
+    "payoff": "Cards 2 to 4 show the drainage schedule that causes the closure."
+  },
+  "wontSay": [
+    "That the closure is permanent",
+    "Anything about routes other than the Ridge Line"
+  ],
+  "sources": [
+    {
+      "title": "Ridge Line maintenance plan",
+      "url": "https://example.org/ridge-line/maintenance-plan",
+      "supports": "closure dates and their cause"
+    }
+  ],
+  "reservations": ["The dates for next year are provisional"],
+  "formats": ["carousel"],
+  "networks": ["Instagram", "LinkedIn"],
+  "basis": "exploratory",
+  "basisReason": "No comparable post has been published yet."
+}

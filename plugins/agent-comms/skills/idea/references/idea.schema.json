@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "idea.json",
+  "description": "Machine form of the subject report written by the idea step. chosen, plan and beforeWriting are required by the plan turn of the interactive step and optional in a one-shot run; a plan that is present follows the same rules.",
+  "type": "object",
+  "required": [
+    "question",
+    "angle",
+    "promise",
+    "audience",
+    "hook",
+    "wontSay",
+    "sources",
+    "reservations",
+    "formats",
+    "networks",
+    "basis",
+    "basisReason"
+  ],
+  "properties": {
+    "question": {
+      "type": "string",
+      "description": "One bounded question the sources can answer honestly."
+    },
+    "angle": {
+      "type": "string"
+    },
+    "promise": {
+      "type": "string",
+      "description": "Exactly one sentence."
+    },
+    "audience": {
+      "type": "string"
+    },
+    "hook": {
+      "type": "object",
+      "required": [
+        "text",
+        "payoff"
+      ],
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "payoff": {
+          "type": "string",
+          "description": "Where the sources pay the hook off. A hook with no payoff is bait."
+        }
+      }
+    },
+    "wontSay": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "title",
+          "url",
+          "supports"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https?://"
+          },
+          "supports": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "reservations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "formats": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "carousel",
+          "reel",
+          "image"
+        ]
+      }
+    },
+    "networks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "basis": {
+      "enum": [
+        "dated-evidence",
+        "exploratory"
+      ]
+    },
+    "basisReason": {
+      "type": "string",
+      "description": "For dated-evidence: the date (YYYY-MM-DD) of the audience report. For exploratory: why no comparable exists."
+    },
+    "chosen": {
+      "type": "object",
+      "required": [
+        "proposalId",
+        "kind"
+      ],
+      "description": "The proposal followed. Repeats the editor's choice.json.",
+      "properties": {
+        "proposalId": {
+          "enum": [
+            "p1",
+            "p2",
+            "p3"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "chosen",
+            "delegated"
+          ]
+        },
+        "note": {
+          "type": "string",
+          "description": "The editor's note, word for word. Absent when there is none."
+        }
+      }
+    },
+    "plan": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 9,
+      "description": "One step per future card or block, in order. Every URL is also in sources. A step between the first and the last has at least one source.",
+      "items": {
+        "type": "object",
+        "required": [
+          "n",
+          "title",
+          "goal",
+          "sources"
+        ],
+        "properties": {
+          "n": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "From 1, consecutive."
+          },
+          "title": {
+            "type": "string"
+          },
+          "goal": {
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://"
+            }
+          }
+        }
+      }
+    },
+    "beforeWriting": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "string"
+      },
+      "description": "What is still to verify or find before writing; kept out of the plan."
+    }
+  }
+}

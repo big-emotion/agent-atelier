@@ -1,0 +1,21 @@
+{
+  "sourceRepo": "source",
+  "description": "Generic, English, de-branded rewrite of the source skill and of the carousel schema section. The sha256 is the hash of the source file when it was last reconciled; the source project's drift report flags a change.",
+  "files": [
+    {
+      "pack": "SKILL.md",
+      "source": "source/structure/SKILL.md",
+      "sha256": "d1115b51082a2ff3705cc6d6d3fe3d32731b49c39071e81c726135a66429476f"
+    },
+    {
+      "pack": "references/carousel-sequence.md",
+      "source": "source/narrative-families.md",
+      "sha256": "a5d1e4853a113a2ddbdeaf94ae17a3995ecc3ba509f169f9f6b23165af3ac04b"
+    },
+    {
+      "pack": "references/cards.schema.json",
+      "source": "source/carousel-schema-spec.md",
+      "sha256": "2019751c5fbf3b46afd385046891751a4ce04cfc66a7e7b8bf13f283da8d0050"
+    }
+  ]
+}

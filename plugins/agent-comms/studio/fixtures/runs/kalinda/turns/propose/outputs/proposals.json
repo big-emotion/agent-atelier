@@ -1,0 +1,52 @@
+{
+  "subject": "L'origine du bleu indigo de la collection d'automne",
+  "proposals": [
+    {
+      "id": "p1",
+      "title": "D'où vient ce bleu",
+      "question": "D'où vient le pigment du bleu de la collection d'automne, et que sait-on de sa route ?",
+      "pattern": "origin-explained",
+      "tells": "Partir de la fiche du fournisseur, dire ce qu'elle établit, puis ce qu'elle laisse ouvert.",
+      "reader": "Lectrices qui se demandent d'où vient la couleur",
+      "cannotClaim": "L'origine exacte du pigment : la fiche parle d'import sans la détailler.",
+      "criterion": "La lectrice peut dire ce que la fiche établit sur l'origine et ce qu'elle ne dit pas ; les sources ne donnent ni pays ni producteur.",
+      "recommended": true,
+      "reason": "La fiche du fournisseur et le registre se recoupent ; les autres lectures reposent sur une seule source."
+    },
+    {
+      "id": "p2",
+      "title": "Une teinture végétale locale ?",
+      "question": "Le bleu de la collection vient-il d'une teinture végétale locale ?",
+      "pattern": "received-claim-examined",
+      "tells": "Reprendre l'idée des lectrices, la confronter à la fiche du fournisseur et dire ce que chacune soutient.",
+      "reader": "Lectrices qui répètent l'idée d'une teinture locale",
+      "cannotClaim": "Qu'aucune plante locale n'entre dans la teinture ; la fiche parle d'un pigment importé, pas de ce qui est ajouté ensuite.",
+      "criterion": "La lectrice peut reformuler l'idée reçue et ce que la fiche établit ; les sources ne tranchent pas la part éventuelle d'une plante locale.",
+      "recommended": false,
+      "reason": "L'idée n'est attestée que par un fil de discussion, la correction demande de la prudence."
+    },
+    {
+      "id": "p3",
+      "title": "Le chemin du pigment",
+      "question": "Par quelles étapes le pigment arrive-t-il à l'atelier ?",
+      "pattern": "circulation",
+      "tells": "Suivre le lot de pigment du fournisseur à l'atelier, en disant quelles étapes sont attestées et lesquelles sont déduites.",
+      "reader": "Lectrices curieuses des coulisses",
+      "cannotClaim": "Les étapes avant le fournisseur : aucune source n'en parle.",
+      "criterion": "La lectrice peut distinguer les étapes attestées des étapes déduites ; les sources ne couvrent que le dernier maillon.",
+      "recommended": false,
+      "reason": "Seul le dernier maillon est documenté, l'histoire resterait courte."
+    }
+  ],
+  "vigilance": [
+    "Le fil de discussion est un témoignage de lectrices, pas une source officielle.",
+    "La fiche du fournisseur date de 2023 ; le lot de cet automne n'est pas documenté.",
+    "Le reel sur l'entretien du tissu indigo est déjà publié ; ne pas le répéter."
+  ],
+  "beforeWriting": [
+    "Ouvrir la fiche du fournisseur et confirmer la mention de l'import.",
+    "Vérifier si le registre de l'atelier cite le lot de cet automne."
+  ],
+  "basis": "exploratory",
+  "basisReason": "Aucune pièce comparable sur l'origine d'une couleur n'a encore été publiée."
+}

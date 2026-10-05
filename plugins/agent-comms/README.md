@@ -1,6 +1,6 @@
 # Agent Comms
 
-> Four skills for publishing short-form video and social content: why the viewer stays, how the file gets made, what the audience actually did, and what to publish next.
+> Skills for publishing short-form video and social content: why the viewer stays, how the file gets made, what the audience actually did, and what to publish next.
 
 Part of [Agent Atelier](../../README.md). Install:
 
@@ -107,6 +107,17 @@ Decides what to publish next, on which channel, how often and for whom — from 
 ```
 /agent-comms:content-strategist --both --collect-metrics
 ```
+
+### `idea`, `structure-carousel`, `structure-image` and `structure-reel` — skill packs
+
+The first two steps of the idea, structure, produce chain, written generically so any project supplies its own profile. `idea` writes the subject report, either in one shot or as two turns with the editor's real choice in between (storylines with a success criterion, then a detailed plan shown before anything is written); the structure pack for the chosen format (carousel, single image or reel) writes the sourced copy, the captions, the Commons image titles and the quotes, and for a reel an engine-neutral `scenes.json`. Each carries a `studio.md` contract and, with `audience-audit` and `content-strategist`, a fixed list of deliverables. The [studio kit](studio/README.md) holds the validators, the guide-mode prompt renderer and the answer parser that let a product run any of them either through an API or in the user's own session.
+
+**Use them when:**
+
+- You are building a tool that runs the chain as steps and needs deliverables that validate the same way whichever way they were produced
+- You want a carousel in which every claim has a source and an exact quote a machine can check
+
+**Don't use them for:** rendering, reading licences, or publishing; those stay server-side or manual.
 
 ## What this plugin does not carry
 
