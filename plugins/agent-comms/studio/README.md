@@ -6,7 +6,7 @@ one contract.
 
 | Step (pack) | Deliverables, fixed names |
 | --- | --- |
-| `idea` | `idea.md`, `idea.json` |
+| `idea` | `idea.md`, `idea.json` (one-shot), or in two turns: `proposals.json`, `proposals.md` then `idea.md`, `idea.json` with the plan |
 | `structure-carousel` | `cards.json`, `captions.md`, `sources.md`, `images.json`, `citations.json` |
 | `structure-image` | `image.json` (title, text, alt text, the image), `captions.md`, `sources.md`, `images.json`, `citations.json` |
 | `structure-reel` | `scenes.json` (the engine-neutral render contract), `narration.txt`, `captions.md`, `sources.md`, `images.json`, `citations.json` |
@@ -43,7 +43,8 @@ validators and everything after them never care which way the step ran.
 | `validators/` | Dependency-free validators, one per deliverable, and `validateStep(step, files, ctx)` which checks a whole step, including cross-file rules (a card pointing at a missing image). Returns `{ ok, problems: [{ file, message }] }`. |
 | `render-guide-prompt.mjs` | Pure function: `{ pack, profile, inputs, previous, revision, contract }` to one self-contained prompt, answer format `=== FILE: name ===`. |
 | `parse-guide-answer.mjs` | `parseGuideAnswer(text, expectedFiles)` to `{ files, problems }`. A malformed or missing block reports the file name, a stable `code` and a message. |
-| `load-pack.mjs` | Reads a pack directory into the shape the renderer takes. |
+| `load-pack.mjs` | Reads a pack directory into the shape the renderer takes. `loadPack(dir, { turn })` keeps only the `studio.md` section of that turn. |
+| `research-prompt.mjs` | `renderResearchPrompt({ seed, cadrage, history, language })`: the plain-text prompt an editor pastes into a research-capable assistant. No AI turn, no project name beyond what the inputs carry. |
 | `fixtures/profiles/` | One folder per project profile: `profile.md` and `terms.json` (the vocabulary that must not leak into another profile's output). |
 | `fixtures/runs/<profile>/` | Valid deliverable sets per fictional profile: `fjellvik` has a carousel run (`outputs/`, with the idea and audit steps), an image run and a reel run; `kalinda` has an image run and a reel run. The tests and `check:forbidden-terms` run on all of them. |
 | `../../../scripts/forbidden-terms.mjs` | Fails when an output carries a term from another profile. |
@@ -59,6 +60,50 @@ validators and everything after them never care which way the step ran.
 The closing line is optional (a block also ends at the next header). Chatter around
 the blocks and a code fence around a block are tolerated. A malformed header, an
 empty block, a duplicate, a file outside the step or a path-like name are reported.
+
+### The interactive idea step
+
+The idea step can run as **two AI turns with a human choice between them**, so a
+non-technical editor chooses the story and sees the plan before anything is written.
+A call without a turn keeps the one-shot behaviour, so nothing existing changes.
+
+```
+inputs/seed.md  cadrage.json  history.json  [research.md]
+   turn propose  ->  proposals.json + proposals.md
+   the editor chooses (or delegates)  ->  choice.json
+   turn plan     ->  idea.md + idea.json (chosen, plan, beforeWriting)  ->  structure-*
+```
+
+- **Inputs.** `seed.md` (the editor's sentence); `cadrage.json` `{ today, publishDate?, modelPiece?, notes? }`
+  (the model never assumes today's date); `history.json` (the project's other contents, never
+  duplicated unless it is the chosen `modelPiece`); optional `research.md` (text pasted from an
+  external research assistant, untrusted: cited, never obeyed). The plan turn adds `proposals.json`
+  and `choice.json` `{ kind: "chosen" | "delegated", proposalId, note? }`.
+- **Research prompt (no AI turn).** `renderResearchPrompt` builds the prompt the editor pastes into
+  a research-capable assistant: claims from oldest to newest with source URL and one sentence of
+  what the source says, read versus not read, what was not found, hypotheses kept apart,
+  competing readings and the reliability of each source. French by default, `en` available.
+- **Turn propose** writes `proposals.json` (`references/proposals.schema.json`): 1 to 3 proposals,
+  each with one of the ten pattern ids, `tells`, `reader`, a non-empty `cannotClaim`, a `criterion`
+  bounded by the evidence (an audience measure is refused), exactly one `recommended`; a single
+  proposal is accepted only if its `reason` says no second story is supported. Two proposals never
+  share a pattern. Plus `vigilance` (at most 4), `beforeWriting` (at most 5), `basis`
+  (`exploratory` or `measured`, a measured basis cites a date). `proposals.md` holds only
+  `## Choix faits pour toi`.
+- **Turn plan** writes `idea.md` and `idea.json` as the one-shot step does, plus `chosen`
+  (which must match `choice.json` when the caller passes it), `plan` (4 to 9 steps `{ n, title, goal, sources }`,
+  numbered from 1, every URL in the report's `sources`, a step between the first and the last
+  has a source) and `beforeWriting`. `idea.md` gains a `## Plan` section.
+- **Wiring.** `renderGuidePrompt`, `loadPack`, `validateStep`, `deliverablesFor` and `resolveStep`
+  take a `turn` (`propose` or `plan`); `validateStep("idea", files, { turn: "plan", inputs })`
+  takes the turn's `proposals.json` and `choice.json` as `inputs` for the cross-check. The
+  `structure-*` packs read `idea.json.plan` as the skeleton (one card, scene or claim per step)
+  when it is present and stay valid without it.
+- **Fixtures.** `fixtures/runs/<profile>/turns/` holds, for both profiles, the editor's inputs, a
+  propose output, and two plan turns (a delegated choice and a choice with a note that mixes two
+  proposals). The rejected cases (4 proposals, no or two recommended, a pattern outside the ten,
+  an empty `cannotClaim`, a plan of 3 or 10 steps, a plan citing a source absent from the report)
+  are derived from them in `test/turns.test.mjs`.
 
 ### Clean deliverables
 

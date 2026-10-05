@@ -28,3 +28,26 @@ export function readRun(profile, format) {
 }
 
 export const jsonOf = (files, name) => JSON.parse(files[name]);
+
+// The interactive idea step: runs/<profile>/turns holds the editor's inputs, the
+// propose turn's outputs, and two plan turns (one delegated, one chosen with a note).
+const readDir = (dir) => Object.fromEntries(readdirSync(dir).map((name) => [name, readFileSync(join(dir, name), "utf8")]));
+
+export function readTurns(profile) {
+  const base = join(studioDir, "fixtures", "runs", profile, "turns");
+  const plan = (variant) => ({
+    choice: readFileSync(join(base, `plan-${variant}`, "inputs", "choice.json"), "utf8"),
+    outputs: readDir(join(base, `plan-${variant}`, "outputs")),
+  });
+  return {
+    inputs: readDir(join(base, "inputs")),
+    propose: readDir(join(base, "propose", "outputs")),
+    delegated: plan("delegated"),
+    chosen: plan("chosen"),
+  };
+}
+
+export const planContext = (turns, variant) => ({
+  turn: "plan",
+  inputs: { "proposals.json": turns.propose["proposals.json"], "choice.json": turns[variant].choice },
+});

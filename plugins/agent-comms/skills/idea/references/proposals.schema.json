@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "proposals.json",
+  "description": "Output of the propose turn of the idea step: one to three narrative proposals the editor chooses from.",
+  "type": "object",
+  "required": [
+    "subject",
+    "proposals",
+    "vigilance",
+    "beforeWriting",
+    "basis",
+    "basisReason"
+  ],
+  "properties": {
+    "subject": {
+      "type": "string",
+      "description": "The subject in one phrase."
+    },
+    "proposals": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "description": "Two or three normally. Exactly one is allowed only if its reason says no second story is supported by the evidence. Exactly one item has recommended true. Two proposals never share a pattern.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "question",
+          "pattern",
+          "tells",
+          "reader",
+          "cannotClaim",
+          "criterion",
+          "recommended",
+          "reason"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "p1",
+              "p2",
+              "p3"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "question": {
+            "type": "string"
+          },
+          "pattern": {
+            "enum": [
+              "origin-explained",
+              "competing-explanations",
+              "chronological-trajectory",
+              "perspectives",
+              "circulation",
+              "turning-point",
+              "key-actor",
+              "clarifying-comparison",
+              "anecdote-entry",
+              "received-claim-examined"
+            ],
+            "description": "One of the ten patterns of narrative-patterns.md, written as is."
+          },
+          "tells": {
+            "type": "string",
+            "description": "What the piece tells and how it unfolds."
+          },
+          "reader": {
+            "type": "string"
+          },
+          "cannotClaim": {
+            "type": "string",
+            "minLength": 1,
+            "description": "What the evidence does not allow to say."
+          },
+          "criterion": {
+            "type": "string",
+            "description": "Success criterion bounded by the evidence, never an audience measure."
+          },
+          "recommended": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "vigilance": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "string"
+      },
+      "description": "Date or anniversary issues, sensitive claims, source reliability, licence risks, overlaps with the project's other contents."
+    },
+    "beforeWriting": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "string"
+      },
+      "description": "What is still to verify or find before writing."
+    },
+    "basis": {
+      "enum": [
+        "exploratory",
+        "measured"
+      ]
+    },
+    "basisReason": {
+      "type": "string",
+      "description": "For measured: the date (YYYY-MM-DD) of the measure."
+    }
+  }
+}

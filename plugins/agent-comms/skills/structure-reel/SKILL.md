@@ -33,6 +33,11 @@ idea.md + idea.json  →  structure-reel  →  scenes.json, narration.txt, capti
 1. `inputs/idea.md` and `inputs/idea.json`. **Consume the subject report; do not
    choose a fresh argument.** A scene that cannot be written from the sources goes
    back as a reservation; never pad it with an invented source, date or image.
+   **When `idea.json` carries a `plan`, it is the skeleton**: one scene per plan
+   step, in its order, the voice-over built on the sources of its step. Depart
+   from it only with a reason in `## Choix faits pour toi`. `beforeWriting` lists
+   what the idea step could not verify: no scene states a claim that depends on
+   it. Without a plan, build the scenes from the report as before.
 2. `project/profile.md`: language, audience, networks and register.
 3. On a revision: `revision.md` and `inputs/previous/`.
 

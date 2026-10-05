@@ -35,6 +35,12 @@ idea.md + idea.json  →  structure-carousel  →  cards.json, captions.md, sour
    subject report; do not choose a fresh argument.** A card that cannot be written
    from the sources goes back to the idea step as a reservation; it is never
    padded with an invented source, date or image.
+   **When `idea.json` carries a `plan`, it is the skeleton**: one card per plan
+   step, in its order, each card built on the sources of its step (the plan's
+   steps are 4 to 9, as is a deck). Depart from it only with a reason in
+   `## Choix faits pour toi`. `beforeWriting` lists what the idea step could not
+   verify: no card states a claim that depends on it. Without a plan, build the
+   deck from the report as before.
 2. `project/profile.md`: language, audience, the networks and the register of each.
 3. On a revision: `revision.md` and `inputs/previous/`. Change what is asked, keep
    the rest, return every file in full.

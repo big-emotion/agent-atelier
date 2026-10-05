@@ -124,3 +124,21 @@ for (const pack of ["idea", "structure-carousel", "structure-image", "structure-
     }
   });
 }
+
+for (const pack of ["structure-carousel", "structure-reel", "structure-image"]) {
+  test(`${pack}: reads idea.json plan and beforeWriting as the skeleton, and stays valid without them`, () => {
+    const skill = readFileSync(join(skillsDir, pack, "SKILL.md"), "utf8");
+    assert.match(skill, /`plan`/);
+    assert.match(skill, /beforeWriting/);
+    assert.match(skill, /Without a plan/);
+  });
+}
+
+test("the idea pack is restructured in two turns and its SKILL.md stays small", () => {
+  const skill = readFileSync(join(skillsDir, "idea", "SKILL.md"), "utf8");
+  assert.match(skill, /## Turn propose/);
+  assert.match(skill, /## Turn plan/);
+  assert.ok(skill.split("\n").length <= 160, "keep the skill small");
+  const studio = readFileSync(join(skillsDir, "idea", "studio.md"), "utf8");
+  for (const heading of ["## One-shot run", "## Turn propose", "## Turn plan"]) assert.ok(studio.includes(heading), heading);
+});

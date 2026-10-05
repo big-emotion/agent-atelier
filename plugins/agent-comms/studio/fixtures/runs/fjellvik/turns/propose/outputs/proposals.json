@@ -1,0 +1,52 @@
+{
+  "subject": "Who decides when the Ridge Line reopens in spring",
+  "proposals": [
+    {
+      "id": "p1",
+      "title": "The engineer who signs the reopening",
+      "question": "Who decides when the Ridge Line reopens, and on what check?",
+      "pattern": "key-actor",
+      "tells": "Follow the one signature that opens the route: the drainage inspection, then the sign-off.",
+      "reader": "Riders planning a spring trip",
+      "cannotClaim": "That the sign-off date can be predicted a year ahead; the sources give past dates only.",
+      "criterion": "The reader can name who signs the reopening and the check behind it; the sources do not show how the date is chosen from one year to the next.",
+      "recommended": true,
+      "reason": "Two sources name the sign-off and its check; the other readings rest on one source each."
+    },
+    {
+      "id": "p2",
+      "title": "Ten springs, ten dates",
+      "question": "How have the reopening dates moved since 2016?",
+      "pattern": "chronological-trajectory",
+      "tells": "Line up the logged reopening dates and show the spread without explaining any single year.",
+      "reader": "Riders who want to know what to expect",
+      "cannotClaim": "Why any single year was earlier or later; the log gives dates, not causes.",
+      "criterion": "The reader can order the logged dates and tell a documented date from a guess; the sources do not explain the differences.",
+      "recommended": false,
+      "reason": "The log is solid for dates but silent on causes, so the story stays descriptive."
+    },
+    {
+      "id": "p3",
+      "title": "Does the snow decide?",
+      "question": "Is the route reopened when the snow melts?",
+      "pattern": "received-claim-examined",
+      "tells": "Take the rider belief, set it against the maintenance plan and say what each supports.",
+      "reader": "Riders who repeat the snow explanation",
+      "cannotClaim": "That snow plays no role at all; the plan names drainage as the check, it does not exclude snow.",
+      "criterion": "The reader can restate the snow belief and the documented check; the sources do not settle whether snow ever delays the sign-off.",
+      "recommended": false,
+      "reason": "The belief is only attested by one forum thread, so the correction needs care."
+    }
+  ],
+  "vigilance": [
+    "The reopening log stops at 2025; a 2026 date is not documented.",
+    "The forum thread is a rider's account, not an official source.",
+    "The closure carousel already covers the October closure; do not repeat it."
+  ],
+  "beforeWriting": [
+    "Open the council minutes and confirm the sign-off wording.",
+    "Find out whether the logged 2020 date was a delay or a plan."
+  ],
+  "basis": "exploratory",
+  "basisReason": "No comparable spring piece has been published yet."
+}

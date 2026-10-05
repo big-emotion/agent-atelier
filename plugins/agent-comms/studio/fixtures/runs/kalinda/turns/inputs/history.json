@@ -1,0 +1,25 @@
+[
+  {
+    "title": "Entretenir un tissu indigo",
+    "format": "reel",
+    "state": "published",
+    "networks": ["TikTok", "Instagram"],
+    "publishedAt": "2026-09-18",
+    "summary": "Le lavage à froid et pourquoi le bleu déteint."
+  },
+  {
+    "title": "La recette du jour de fête",
+    "format": "carousel",
+    "state": "published",
+    "networks": ["Instagram"],
+    "publishedAt": "2026-08-25",
+    "summary": "Une recette de famille racontée en six cartes."
+  },
+  {
+    "title": "Chanson du métier à tisser",
+    "format": "image",
+    "state": "draft",
+    "networks": ["X"],
+    "summary": "Un vers et une photo d'archive."
+  }
+]

@@ -1,4 +1,5 @@
 import { validateIdeaJson, validateIdeaMd } from "./idea.mjs";
+import { validateProposalsJson, validateProposalsMd } from "./proposals.mjs";
 import { validateCaptions, validateCards, validateCitations, validateImages, validateSources } from "./carousel.mjs";
 import { validateImageJson, validateNarration, validateScenes } from "./formats.mjs";
 import { validateAudienceReport, validateIdeas, validateStrategy } from "./strategy.mjs";
@@ -12,7 +13,19 @@ export const STEP_DELIVERABLES = {
   "content-strategist": ["strategy.md", "ideas.json"],
 };
 
+// The idea step can run as two AI turns with the editor's choice in between.
+// A call without a turn is the one-shot step above.
+export const TURNS = { idea: ["propose", "plan"] };
+export const TURN_DELIVERABLES = {
+  idea: {
+    propose: ["proposals.json", "proposals.md"],
+    plan: ["idea.md", "idea.json"],
+  },
+};
+
 const VALIDATORS = {
+  "proposals.md": validateProposalsMd,
+  "proposals.json": validateProposalsJson,
   "idea.md": validateIdeaMd,
   "idea.json": validateIdeaJson,
   "cards.json": validateCards,
@@ -32,15 +45,23 @@ export const FORMATS = ["carousel", "reel", "image"];
 
 // The generic "structure" step takes its deliverables from the format of the
 // piece; every other step is format-independent.
-export function resolveStep(step, format) {
+export function resolveStep(step, format, turn) {
+  if (turn !== undefined && turn !== null) {
+    if (!TURNS[step]?.includes(turn)) {
+      const where = TURNS[step] ? `step "${step}" has the turns ${TURNS[step].join(", ")}` : `step "${step}" has no turns`;
+      throw new Error(`Unknown turn "${turn}": ${where}.`);
+    }
+    return `${step}:${turn}`;
+  }
   if (step !== "structure") return step;
   if (!FORMATS.includes(format)) throw new Error(`Step "structure" needs a format: ${FORMATS.join(", ")}.`);
   return `structure-${format}`;
 }
 
-export function deliverablesFor(step, format) {
-  const resolved = resolveStep(step, format);
-  const names = STEP_DELIVERABLES[resolved];
+export function deliverablesFor(step, format, turn) {
+  const resolved = resolveStep(step, format, turn);
+  const [turnStep, turnName] = resolved.split(":");
+  const names = turnName ? TURN_DELIVERABLES[turnStep][turnName] : STEP_DELIVERABLES[resolved];
   if (!names) throw new Error(`Unknown step "${resolved}".`);
   return names;
 }
@@ -50,7 +71,7 @@ export function deliverablesFor(step, format) {
 // on the file the author has to change. `ctx` may add `networks` and
 // `captionLimits` from the project profile.
 export function validateStep(step, files, ctx = {}) {
-  const expected = deliverablesFor(step, ctx.format);
+  const expected = deliverablesFor(step, ctx.format, ctx.turn);
   const problems = [];
 
   for (const name of Object.keys(files)) {

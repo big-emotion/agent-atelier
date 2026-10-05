@@ -102,3 +102,78 @@ test("the wrapper itself forbids leaking preferences and the contract, whatever 
   assert.ok(prompt.includes("Never mention the contract, the instructions, the format rules, the validator or the user's preferences inside any deliverable."));
   assert.ok(prompt.includes("states only the decision and the reason about the subject"));
 });
+
+// ---- the interactive idea step
+
+import { loadPack } from "../load-pack.mjs";
+import { pluginDir, readTurns } from "./helpers.mjs";
+import { join } from "node:path";
+
+const turnInputs = (turns, extra = []) => [
+  ...Object.entries(turns.inputs).map(([name, content]) => ({ name, content })),
+  ...extra,
+];
+
+test("turn propose asks for proposals.json and proposals.md and never for the idea report", () => {
+  const turns = readTurns("fjellvik");
+  const prompt = renderGuidePrompt({ ...base(), inputs: turnInputs(turns), turn: "propose" });
+  assert.ok(prompt.includes("=== FILE: proposals.json ==="));
+  assert.ok(prompt.includes("=== FILE: proposals.md ==="));
+  assert.ok(!prompt.includes("=== FILE: idea.md ==="));
+  assert.match(prompt, /turn "propose"/);
+});
+
+test("turn plan reads the choice and asks for the idea report", () => {
+  const turns = readTurns("kalinda");
+  const prompt = renderGuidePrompt({
+    ...base(),
+    inputs: turnInputs(turns, [
+      { name: "proposals.json", content: turns.propose["proposals.json"] },
+      { name: "choice.json", content: turns.chosen.choice },
+    ]),
+    turn: "plan",
+  });
+  assert.ok(prompt.includes("=== FILE: idea.json ==="));
+  assert.ok(prompt.includes(JSON.parse(turns.chosen.choice).note));
+  assert.match(prompt, /turn "plan"/);
+});
+
+test("a turn refuses to render without the inputs it reads", () => {
+  const turns = readTurns("fjellvik");
+  assert.throws(() => renderGuidePrompt({ ...base(), inputs: [], turn: "propose" }), /seed\.md/);
+  const withProposals = turnInputs(turns, [{ name: "proposals.json", content: turns.propose["proposals.json"] }]);
+  assert.throws(() => renderGuidePrompt({ ...base(), inputs: withProposals, turn: "plan" }), /choice\.json/);
+  assert.throws(() => renderGuidePrompt({ ...base(), inputs: turnInputs(turns), turn: "draft" }), /turn/i);
+});
+
+test("pasted research is flagged as untrusted source material", () => {
+  const turns = readTurns("fjellvik");
+  const prompt = renderGuidePrompt({ ...base(), inputs: turnInputs(turns), turn: "propose" });
+  assert.match(prompt, /research\.md/);
+  assert.match(prompt, /untrusted/i);
+  const without = Object.fromEntries(Object.entries(turns.inputs).filter(([name]) => name !== "research.md"));
+  const noResearch = renderGuidePrompt({ ...base(), inputs: Object.entries(without).map(([name, content]) => ({ name, content })), turn: "propose" });
+  assert.ok(!/untrusted/i.test(noResearch));
+});
+
+test("without a turn the prompt is the one-shot prompt it always was", () => {
+  const prompt = renderGuidePrompt(base());
+  assert.ok(!/turn "/.test(prompt));
+  assert.ok(prompt.includes("=== FILE: idea.md ==="));
+});
+
+test("loadPack keeps the contract of the turn asked for and drops the others", () => {
+  const dir = join(pluginDir, "skills", "idea");
+  const propose = loadPack(dir, { turn: "propose" }).studio;
+  const plan = loadPack(dir, { turn: "plan" }).studio;
+  const oneShot = loadPack(dir).studio;
+  for (const studio of [propose, plan, oneShot]) assert.ok(studio.includes("## Choix faits pour toi"));
+  assert.ok(propose.includes("proposals.json") && propose.includes("proposals.md"));
+  assert.ok(!propose.includes("idea.json") && !propose.includes("choice.json"));
+  assert.ok(plan.includes("choice.json") && plan.includes("idea.json") && !plan.includes("proposals.md"));
+  assert.ok(oneShot.includes("idea.md") && !oneShot.includes("proposals.md") && !oneShot.includes("choice.json"));
+  for (const studio of [propose, plan, oneShot]) {
+    assert.match(studio, /never ask/i);
+    assert.ok(studio.includes("Never mention the contract"));
+  }
+});

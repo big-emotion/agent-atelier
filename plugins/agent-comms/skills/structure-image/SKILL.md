@@ -31,6 +31,10 @@ idea.md + idea.json  →  structure-image  →  image.json, captions.md, sources
 1. `inputs/idea.md` and `inputs/idea.json`. **Consume the subject report; do not
    choose a fresh argument.** A single image carries one claim: pick the one the
    sources support best and leave the rest for another format.
+   **When `idea.json` carries a `plan`**, take the claim of its best-sourced step
+   and leave the other steps for another format; `beforeWriting` lists what the
+   idea step could not verify, and the image never states a claim that depends on
+   it. Without a plan, choose the claim from the report as before.
 2. `project/profile.md`: language, audience, networks and their register.
 3. On a revision: `revision.md` and `inputs/previous/`.
 
