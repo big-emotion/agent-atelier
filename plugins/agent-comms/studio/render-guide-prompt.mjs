@@ -83,20 +83,28 @@ Section headings are fixed identifiers: copy them exactly as written in the deli
     );
   }
 
-  const blocks = files.map((name) => `=== FILE: ${name} ===\n<the complete content of ${name}>\n=== END FILE ===`).join("\n\n");
+  const headers = files.map((name) => `=== FILE: ${name} ===`).join("\n");
   sections.push(`# How to deliver
 
 The files to produce: ${files.join(", ")}.
 
-- If you can write files (a coding agent such as Claude Code or Codex): write
-  each file into \`outputs/\`, then reply with the list of files you wrote.
-- Otherwise (a chat app): end your last message with one block per file, in
-  exactly this form, and nothing after the last block:
+- A coding agent (Claude Code, Codex): write each file into \`outputs/\` and reply with the list.
+- A chat app: end your last message with one block per file, each exactly like this
+  example, and nothing after the last block.
 
-${blocks}
+\`\`\`
+=== FILE: ${files[0]} ===
+<the complete content of ${files[0]}>
+=== END FILE ===
+\`\`\`
 
-Give each file in full, never "unchanged" or "as before". Put the file content
-directly under its header, without a code fence around it.`);
+The header lines to use, copied character for character, one per block:
+
+${headers}
+
+The header is a line of its own: no \`###\`, no bold, no backticks. Put the content
+directly under it, with no code fence around it. Give each file in full, never
+"unchanged" or "as before".`);
 
   return sections.join("\n\n");
 }

@@ -42,7 +42,7 @@ validators and everything after them never care which way the step ran.
 | --- | --- |
 | `validators/` | Dependency-free validators, one per deliverable, and `validateStep(step, files, ctx)` which checks a whole step, including cross-file rules (a card pointing at a missing image). Returns `{ ok, problems: [{ file, message }] }`. |
 | `render-guide-prompt.mjs` | Pure function: `{ pack, profile, inputs, previous, revision, contract }` to one self-contained prompt, answer format `=== FILE: name ===`. |
-| `parse-guide-answer.mjs` | `parseGuideAnswer(text, expectedFiles)` to `{ files, problems }`. A malformed or missing block reports the file name, a stable `code` and a message. |
+| `parse-guide-answer.mjs` | `parseGuideAnswer(text, expectedFiles)` to `{ files, problems, assumptions }`. Tolerant of header drift and of an unlabeled JSON block (see below); a malformed or missing block reports the file name, a stable `code` and a message. `normaliseAnswerHeader(line)` is the exported header reader. |
 | `load-pack.mjs` | Reads a pack directory into the shape the renderer takes. `loadPack(dir, { turn })` keeps only the `studio.md` section of that turn. |
 | `research-prompt.mjs` | `renderResearchPrompt({ seed, cadrage, history, language })`: the plain-text prompt an editor pastes into a research-capable assistant. No AI turn, no project name beyond what the inputs carry. |
 | `fixtures/profiles/` | One folder per project profile: `profile.md` and `terms.json` (the vocabulary that must not leak into another profile's output). |
@@ -57,9 +57,38 @@ validators and everything after them never care which way the step ran.
 === END FILE ===
 ```
 
-The closing line is optional (a block also ends at the next header). Chatter around
-the blocks and a code fence around a block are tolerated. A malformed header, an
-empty block, a duplicate, a file outside the step or a path-like name are reported.
+The prompt asks for exactly this, but a chat model drifts and a non-technical editor
+cannot fix a header by hand, so the parser is tolerant without ever accepting garbage.
+
+**Accepted headers** (case-insensitive, a leading folder such as `outputs/` ignored, with or
+without a ```` ```json ````/```` ```markdown ```` fence around the content, nested fences
+inside markdown kept): `=== FILE: x ===`, `=== FILE : x ===`, `=== file: x ===`, `### x`,
+`## x`, `# x`, `**x**`, `**x:**`, `` `x` ``, `File: x`, `Fichier : x`, `x:`, `--- x ---`
+and the bare name `x` alone on a line. A loose header (anything but the `=== FILE:` family)
+counts only when `x` is a deliverable of the current step, so an ordinary markdown title is
+never taken for a file; a `=== FILE:` header naming something else is `unexpected`. Smart
+quotes, no-break spaces, zero-width characters and a BOM are normalised in headers only.
+
+**End of a block**: `=== END FILE ===`, `=== FIN ===`, the next header, or the end of the text.
+
+**Content sniffing**: a JSON block with no header, or under a wrong name, is assigned to the
+one still-missing JSON deliverable it structurally fits (`cartes` is `cards.json`, `proposals`
+is `proposals.json`, `scenes`, `images`, `ideas`, a list of citations with `quote`, `image.json`
+by `alt` and `texte`, `idea.json` by `question` and `angle`). It never overwrites a file found
+by header, never guesses between two candidates or two targets, and never sniffs markdown. Each
+guess is listed in `assumptions` as `{ file, kind: "recognised-by-content", from, message }`
+(`from` is the wrong name, or `null`), so the portal can say "J'ai reconnu cards.json a son
+contenu". It is an assumption, not a problem.
+
+**Trailing prose**: after a JSON file the text is cut at the closing brace (matched outside
+strings, then really parsed). After the last markdown file, only a sign-off is dropped: a
+horizontal rule followed by a short paragraph that reads as a sign-off, or trailing paragraphs
+made only of sign-off lines. When unsure the text stays and the validator speaks.
+
+**JSON is never repaired.** Comments and trailing commas give `invalid-json` with the line and
+column, and the file is not returned. Other problem codes are unchanged: `malformed-header`,
+`unsafe-name` (a `..` segment, an absolute path, a dot file), `unexpected`, `duplicate`, `empty`,
+`missing`.
 
 ### The interactive idea step
 

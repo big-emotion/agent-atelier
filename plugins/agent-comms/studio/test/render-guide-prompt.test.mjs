@@ -177,3 +177,11 @@ test("loadPack keeps the contract of the turn asked for and drops the others", (
     assert.ok(studio.includes("Never mention the contract"));
   }
 });
+
+test("the answer format shows the exact block once and lists every header", () => {
+  const prompt = renderGuidePrompt(base());
+  assert.equal(prompt.split("=== END FILE ===").length - 1, 1);
+  assert.equal(prompt.split("=== FILE: idea.md ===").length - 1, 2);
+  assert.ok(prompt.includes("no code fence around it"));
+  assert.ok(prompt.includes("<the complete content of idea.md>"));
+});
