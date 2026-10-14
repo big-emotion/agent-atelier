@@ -167,3 +167,10 @@ test("a clip naming an unknown source is refused", () => {
   const errors = validatePlan(montage({ clips: [[0, 3, 2]] }));
   assert.match(errors.join(), /source 2/);
 });
+
+// A screen recording or a windowed source carries bars around the picture;
+// `crop` keeps only the picture, in source pixels.
+test("a crop names a positive rectangle in source pixels", () => {
+  assert.deepEqual(validatePlan(plan({ crop: { x: 72, y: 40, w: 1136, h: 638 } })), []);
+  assert.match(validatePlan(plan({ crop: { x: 0, y: 0, w: 0, h: 10 } })).join(), /crop/);
+});

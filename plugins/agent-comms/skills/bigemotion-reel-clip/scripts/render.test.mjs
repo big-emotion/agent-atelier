@@ -116,3 +116,22 @@ test("a montage plays its clips in plan order, across sources", async () => {
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("a crop removes the bars around the source picture", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "be-clip-"));
+  try {
+    const boxed = join(dir, "boxed.mp4");
+    spawnSync("ffmpeg", [
+      "-v", "error", "-y",
+      "-f", "lavfi", "-i", "color=c=0x808080:size=280x140:rate=30:duration=6",
+      "-f", "lavfi", "-i", "sine=duration=6",
+      "-vf", "pad=320:180:20:20:black", "-shortest", boxed,
+    ]);
+    const plan = writePlan(dir, { source: boxed, crop: { x: 20, y: 20, w: 280, h: 140 } });
+    const done = await renderClip(plan, join(dir, "out"));
+    const [r, g, b] = pixel(done.reel, 1, 46, 600);
+    assert.ok(r > 100 && g > 100 && b > 100, "the window edge shows picture, not the bar");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

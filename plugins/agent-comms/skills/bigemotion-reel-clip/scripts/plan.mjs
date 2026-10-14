@@ -78,6 +78,12 @@ export function validatePlan(plan) {
         `${label}: ${rate.toFixed(1)} characters per second, at most ${MAX_READING_RATE}`
       );
   });
+  if (plan.crop) {
+    const { x, y, w, h } = plan.crop;
+    if (![x, y].every((v) => Number.isInteger(v) && v >= 0) ||
+        ![w, h].every((v) => Number.isInteger(v) && v > 0))
+      errors.push("crop: x, y, w, h in source pixels, w and h above zero");
+  }
   // DEC-023: every BBH cut ships an ASCII-only cmap, so an accent in the
   // display face silently falls back to another font mid-word.
   if (plan.headline) {

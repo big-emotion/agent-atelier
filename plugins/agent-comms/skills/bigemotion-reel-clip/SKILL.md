@@ -53,11 +53,22 @@ chromium` if none is there). FFmpeg must be on the PATH.
    speech never goes into the deliverable; delete `WORK_DIR` at the end. Name
    the channel from the YouTube oEmbed
    (`https://www.youtube.com/oembed?url=…&format=json`).
-2. **Cut.** Enter after the previous speaker's last word, ~0.15 s before the
+2. **Check the picture before cutting.** A file saved from a browser is
+   often a **screen recording of the player**: the YouTube page, the title
+   bar, the progress bar, the cursor or a thumbnail preview come and go
+   whenever the recorder moved the mouse. **None of it may reach the clip.**
+   Look at a contact sheet, then find the exact frames: the progress bar is a
+   wide red line a few pixels high at a fixed row (locate it on one frame
+   where it shows, then scan that row at 30 fps). Red objects in the scene
+   trigger false alarms, so confirm each hit by eye. Cut inside the clean
+   stretches only; if a sentence straddles a UI frame, end the clip on the
+   previous sentence rather than show the UI. Bars around a windowed source
+   are not UI: remove them with `crop`.
+3. **Cut.** Enter after the previous speaker's last word, ~0.15 s before the
    first word; leave after the last complete sentence. Drop a preamble that
    only delays the thesis (« very important question ») — the first seconds
    decide whether the feed scrolls past. Several `clips` make jump cuts.
-3. **Captions**, one phrase per caption, on the source clock (`start` = first
+4. **Captions**, one phrase per caption, on the source clock (`start` = first
    word, `end` = last word).
    - Two lines at most, ≤ 60 characters, ≤ 25 characters per second; the
      browser refuses a third line. Condense rather than speed the reading.
@@ -67,25 +78,26 @@ chromium` if none is there). FFmpeg must be on the PATH.
    - Register: BIG EMOTION copy is tutoiement. A generic « you » becomes « on »
      or « tu »; a real plural (« you guys ») stays « vous ».
    - Keep the audience's own jargon in English (CRUD, back-end, M365).
-4. **Headline and post**: invoke `attention-architect` with the thesis. The
+5. **Headline and post**: invoke `attention-architect` with the thesis. The
    headline is two lines of uppercase **ASCII only** — every BBH cut has an
    ASCII-only cmap (DEC-023), so `METIER`, not `MÉTIER`; the validator refuses
    an accent. A hedged thesis becomes a question, never a BIG EMOTION assertion.
-5. **Validate and render**:
+6. **Validate and render**:
    ```sh
    node SKILL/scripts/render.mjs validate PLAN.json
    node SKILL/scripts/render.mjs render PLAN.json OUT_DIR
    ```
    Writes `reel.mp4` (1080×1350, H.264/AAC), `sous-titres-fr.srt`, `cover.png`
-   (when `thumbnail` is set) and a copy of `plan.json`. About 45 s of render
+   (when `thumbnail` is set) and a copy of `plan.json`. Scan the rendered
+   clip for the progress-bar line again before calling it done. About 45 s of render
    per minute of clip.
-6. **Look**: at least three frames (a caption mid-highlight, a two-line
+7. **Look**: at least three frames (a caption mid-highlight, a two-line
    caption, the last caption) and the cover. Check credit, watermark, the
    source's own logo, no word cut at either end.
-7. **`descriptions.md`** following [references/descriptions.md](references/descriptions.md).
-8. **`verification.md`** following [references/verification.md](references/verification.md).
+8. **`descriptions.md`** following [references/descriptions.md](references/descriptions.md).
+9. **`verification.md`** following [references/verification.md](references/verification.md).
    Rights are always an open decision unless the operator reports a permission.
-9. **Open the clip** (`open OUT_DIR/reel.mp4`) and report: duration, what to
+10. **Open the clip** (`open OUT_DIR/reel.mp4`) and report: duration, what to
    check by ear, open decisions. Never post.
 
 ## Plan format
@@ -102,6 +114,11 @@ chromium` if none is there). FFmpeg must be on the PATH.
 }
 ```
 
+**Crop.** `"crop": { "x": 72, "y": 40, "w": 1136, "h": 638 }` keeps only that
+rectangle of every source, in source pixels (`cropdetect` finds black bars;
+grey ones need a look along one row). The window then frames the picture
+itself, not a frame within the frame.
+
 **Montage.** Replace `source` with `"sources": ["/abs/a.mp4", "/abs/b.mp4"]`;
 a clip's optional third element and a phrase's `source` field name the source
 by index (default 0), and `thumbnail.source` picks the cover's. Clips play in
@@ -109,7 +126,9 @@ plan order, so a montage may open on a later passage and go back; list the
 phrases in reel order. Only clips of the same source must not overlap. The
 sources are framed by the first one's size, so they should share an aspect
 ratio. Build the argument first (what each passage proves, in which order),
-then cut: a montage that only shortens is a cut, not an argument.
+then cut: a montage that only shortens is a cut, not an argument. Prefer one
+continuous passage per clip: jump cuts inside a conversation read as
+tampering, and two clean clips beat one montage.
 
 `headline` is optional; `accent` paints the matching text lemon. Times stay on
 the source clock; the engine moves them onto the clip. A gap under 0.6 s

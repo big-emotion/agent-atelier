@@ -152,7 +152,11 @@ export async function renderClip(planFile, outDir) {
   // A montage's sources are framed by the first one's size; each clip is
   // scaled into the same window, so they should share an aspect ratio.
   const sources = planSources(plan).map((file) => resolve(file));
-  const { width, height } = probeSize(sources[0]);
+  // `crop` trims bars a windowed or screen-recorded source carries, so the
+  // window frames the picture itself.
+  const crop = plan.crop;
+  const { width, height } = crop ? { width: crop.w, height: crop.h } : probeSize(sources[0]);
+  const cropFilter = crop ? `crop=${crop.w}:${crop.h}:${crop.x}:${crop.y},` : "";
   const rect = sourceRect(width, height);
   const phrases = reelPhrases(plan);
   const states = karaokeStates(phrases);
@@ -198,7 +202,7 @@ export async function renderClip(planFile, outDir) {
   const cuts = plan.clips
     .map(
       ([a, b, src = 0], i) =>
-        `[${src}:v]trim=start=${a}:end=${b},setpts=PTS-STARTPTS,fps=${FPS},` +
+        `[${src}:v]trim=start=${a}:end=${b},setpts=PTS-STARTPTS,fps=${FPS},${cropFilter}` +
         `scale=${rect.w}:${rect.h},setsar=1[v${i}];` +
         `[${src}:a]atrim=start=${a}:end=${b},asetpts=PTS-STARTPTS,aresample=48000[a${i}];`
     )
@@ -237,7 +241,7 @@ export async function renderClip(planFile, outDir) {
       "-ss", String(plan.thumbnail.frame_at), "-i", sources[plan.thumbnail.source ?? 0],
       ...still(join(layers, "ground.png")),
       ...still(join(layers, "frame.png")),
-      "-filter_complex", framed("[0:v]setpts=PTS-STARTPTS,", 1),
+      "-filter_complex", framed(`[0:v]setpts=PTS-STARTPTS,${cropFilter}`, 1),
       "-frames:v", "1",
       join(outDir, "cover.png"),
     ]);
