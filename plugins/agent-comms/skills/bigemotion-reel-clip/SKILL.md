@@ -102,6 +102,15 @@ chromium` if none is there). FFmpeg must be on the PATH.
 }
 ```
 
+**Montage.** Replace `source` with `"sources": ["/abs/a.mp4", "/abs/b.mp4"]`;
+a clip's optional third element and a phrase's `source` field name the source
+by index (default 0), and `thumbnail.source` picks the cover's. Clips play in
+plan order, so a montage may open on a later passage and go back; list the
+phrases in reel order. Only clips of the same source must not overlap. The
+sources are framed by the first one's size, so they should share an aspect
+ratio. Build the argument first (what each passage proves, in which order),
+then cut: a montage that only shortens is a cut, not an argument.
+
 `headline` is optional; `accent` paints the matching text lemon. Times stay on
 the source clock; the engine moves them onto the clip. A gap under 0.6 s
 between captions is held so the text does not blink.

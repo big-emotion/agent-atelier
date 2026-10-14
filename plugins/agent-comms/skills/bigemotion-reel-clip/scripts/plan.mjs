@@ -17,22 +17,44 @@ const characters = (text) =>
   [...new Intl.Segmenter("fr", { granularity: "grapheme" }).segment(text)]
     .length;
 
+// A clip is [start, end] or [start, end, sourceIndex]; a phrase names its
+// source with `source`. Both default to the first source.
+const clipSource = (clip) => clip[2] ?? 0;
+const itemSource = (item) => item.source ?? 0;
+
 const inClip = (clips, item) =>
-  clips.some(([a, b]) => item.start >= a && item.end <= b);
+  clips.some(
+    (clip) =>
+      clipSource(clip) === itemSource(item) &&
+      item.start >= clip[0] &&
+      item.end <= clip[1]
+  );
+
+// `source` for a single video, `sources` for a montage.
+export const planSources = (plan) =>
+  Array.isArray(plan.sources) ? plan.sources : [plan.source];
 
 export function validatePlan(plan) {
   const errors = [];
-  if (typeof plan.source !== "string" || !plan.source)
+  const sources = planSources(plan);
+  if (!sources.length || sources.some((s) => typeof s !== "string" || !s))
     errors.push("source: path of the source video is required");
   if (typeof plan.credit_line !== "string" || !plan.credit_line.trim())
     errors.push("credit_line: an excerpt always names its speaker and source");
   const clips = Array.isArray(plan.clips) ? plan.clips : [];
   if (!clips.length)
     errors.push("clips: at least one [start, end] is required");
-  clips.forEach(([start, end], i) => {
+  // Clips play in plan order, so a montage may go back in a source; only an
+  // overlap is refused, since it would make a phrase's place ambiguous.
+  clips.forEach((clip, i) => {
+    const [start, end] = clip;
     if (!(end > start)) errors.push(`clip ${i + 1}: end must follow start`);
-    if (i > 0 && start < clips[i - 1][1])
-      errors.push(`clip ${i + 1}: starts before clip ${i} ends`);
+    if (!(clipSource(clip) in sources))
+      errors.push(`clip ${i + 1}: no source ${clipSource(clip)}`);
+    clips.slice(0, i).forEach((other, k) => {
+      if (clipSource(other) === clipSource(clip) && start < other[1] && end > other[0])
+        errors.push(`clip ${i + 1}: overlaps clip ${k + 1}`);
+    });
   });
   const phrases = Array.isArray(plan.phrases) ? plan.phrases : [];
   if (!phrases.length) errors.push("phrases: at least one caption is required");
@@ -42,7 +64,10 @@ export function validatePlan(plan) {
     if (!text) errors.push(`${label}: caption text is required`);
     if (!(p.end > p.start)) errors.push(`${label}: end must follow start`);
     if (!inClip(clips, p)) errors.push(`${label}: outside every clip`);
-    if (i > 0 && p.start < phrases[i - 1].end)
+    // Compared on the reel clock: in a montage, source times are not ordered.
+    const previous = phrases[i - 1];
+    if (i > 0 && inClip(clips, p) && inClip(clips, previous) &&
+        reelTime(clips, p, p.start) < reelTime(clips, previous, previous.end))
       errors.push(`${label}: overlaps phrase ${i}`);
     const count = characters(text);
     if (count > MAX_CHARACTERS)
@@ -70,21 +95,25 @@ export const reelDuration = (plan) =>
 
 const round = (t) => Math.round(t * 1000) / 1000;
 
-function toReelTime(clips, t) {
+function toReelTime(clips, t, source = 0) {
   let offset = 0;
-  for (const [a, b] of clips) {
-    if (t >= a && t <= b) return round(offset + t - a);
+  for (const clip of clips) {
+    const [a, b] = clip;
+    if (clipSource(clip) === source && t >= a && t <= b)
+      return round(offset + t - a);
     offset += b - a;
   }
-  throw new Error(`time ${t} is outside every clip`);
+  throw new Error(`time ${t} of source ${source} is outside every clip`);
 }
+
+const reelTime = (clips, item, t) => toReelTime(clips, t, itemSource(item));
 
 // `spokenEnd` keeps the voice's end for word timing; `end` may be held over a
 // short silence.
 export function reelPhrases(plan) {
   const moved = plan.phrases.map((p) => {
-    const start = toReelTime(plan.clips, p.start);
-    const end = toReelTime(plan.clips, p.end);
+    const start = toReelTime(plan.clips, p.start, itemSource(p));
+    const end = toReelTime(plan.clips, p.end, itemSource(p));
     return { start, end, spokenEnd: end, text: p.text.trim() };
   });
   for (let i = 0; i < moved.length - 1; i++) {

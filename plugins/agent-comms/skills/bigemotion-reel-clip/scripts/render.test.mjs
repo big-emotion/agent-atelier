@@ -8,11 +8,11 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { renderClip } from "./render.mjs";
 
-const source = (dir) => {
-  const file = join(dir, "wide.mp4");
+const source = (dir, colour = "0x808080", name = "wide.mp4") => {
+  const file = join(dir, name);
   spawnSync("ffmpeg", [
     "-v", "error", "-y",
-    "-f", "lavfi", "-i", "color=c=0x808080:size=320x180:rate=30:duration=6",
+    "-f", "lavfi", "-i", `color=c=${colour}:size=320x180:rate=30:duration=6`,
     "-f", "lavfi", "-i", "sine=duration=6",
     "-shortest", file,
   ]);
@@ -86,6 +86,32 @@ test("a caption over two lines is refused before encoding", async () => {
       phrases: [{ start: 1, end: 4.9, text: "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM" }],
     });
     await assert.rejects(renderClip(plan, join(dir, "out")), /two lines/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("a montage plays its clips in plan order, across sources", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "be-clip-"));
+  try {
+    const plan = writePlan(dir, {
+      source: undefined,
+      sources: [source(dir), source(dir, "0x2050f0", "blue.mp4")],
+      clips: [[1, 3, 1], [1, 3]],
+      phrases: [
+        { source: 1, start: 1.2, end: 2.8, text: "d'abord la seconde" },
+        { start: 1.2, end: 2.8, text: "puis la première" },
+      ],
+      thumbnail: { frame_at: 2, source: 1 },
+    });
+    const out = join(dir, "out");
+    const done = await renderClip(plan, out);
+    assert.ok(Math.abs(Number(probe(done.reel).format.duration) - 4) < 0.15);
+    const [, , blue] = pixel(done.reel, 0.5, 540, 600);
+    const [r, , b] = pixel(done.reel, 3, 540, 600);
+    assert.ok(blue > 200, "the second source plays first");
+    assert.ok(Math.abs(r - 128) < 20 && Math.abs(b - 128) < 20, "then the first");
+    assert.ok(pixel(join(out, "cover.png"), 0, 540, 600)[2] > 200, "cover from the named source");
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

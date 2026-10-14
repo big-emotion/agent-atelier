@@ -13,6 +13,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   validatePlan,
+  planSources,
   reelDuration,
   reelPhrases,
   karaokeStates,
@@ -148,8 +149,10 @@ export async function renderClip(planFile, outDir) {
   const plan = JSON.parse(await readFile(planFile, "utf8"));
   const errors = validatePlan(plan);
   if (errors.length) throw new Error(`Invalid plan:\n- ${errors.join("\n- ")}`);
-  const source = resolve(plan.source);
-  const { width, height } = probeSize(source);
+  // A montage's sources are framed by the first one's size; each clip is
+  // scaled into the same window, so they should share an aspect ratio.
+  const sources = planSources(plan).map((file) => resolve(file));
+  const { width, height } = probeSize(sources[0]);
   const rect = sourceRect(width, height);
   const phrases = reelPhrases(plan);
   const states = karaokeStates(phrases);
@@ -191,26 +194,30 @@ export async function renderClip(planFile, outDir) {
     }))
   );
 
+  // concat needs every segment at the same size, sample aspect and rate.
   const cuts = plan.clips
     .map(
-      ([a, b], i) =>
-        `[0:v]trim=start=${a}:end=${b},setpts=PTS-STARTPTS,fps=${FPS}[v${i}];` +
-        `[0:a]atrim=start=${a}:end=${b},asetpts=PTS-STARTPTS[a${i}];`
+      ([a, b, src = 0], i) =>
+        `[${src}:v]trim=start=${a}:end=${b},setpts=PTS-STARTPTS,fps=${FPS},` +
+        `scale=${rect.w}:${rect.h},setsar=1[v${i}];` +
+        `[${src}:a]atrim=start=${a}:end=${b},asetpts=PTS-STARTPTS,aresample=48000[a${i}];`
     )
     .join("");
   const joined = plan.clips.map((_, i) => `[v${i}][a${i}]`).join("");
-  const framed = (video) =>
-    `${video}scale=${rect.w}:${rect.h}[fg];[1:v][fg]overlay=${rect.x}:${rect.y}:shortest=1[placed];` +
-    `[placed][2:v]overlay=0:0`;
+  // `ground` is the input index of the ground still; the frame still follows.
+  const framed = (video, ground) =>
+    `${video}scale=${rect.w}:${rect.h}[fg];[${ground}:v][fg]overlay=${rect.x}:${rect.y}:shortest=1[placed];` +
+    `[placed][${ground + 1}:v]overlay=0:0`;
+  const n = sources.length;
   const graph =
     cuts +
     `${joined}concat=n=${plan.clips.length}:v=1:a=1[cut][aout];` +
-    framed("[cut]") +
-    `[signed];[3:v]fps=${FPS},format=rgba[cap];` +
+    framed("[cut]", n) +
+    `[signed];[${n + 2}:v]fps=${FPS},format=rgba[cap];` +
     `[signed][cap]overlay=0:0:eof_action=pass,format=yuv420p[vout]`;
   const reel = join(outDir, "reel.mp4");
   ffmpeg([
-    "-i", source,
+    ...sources.flatMap((file) => ["-i", file]),
     ...still(join(layers, "ground.png")),
     ...still(join(layers, "frame.png")),
     "-f", "concat", "-safe", "0", "-i", join(layers, "captions.txt"),
@@ -227,10 +234,10 @@ export async function renderClip(planFile, outDir) {
   // before autoplay, so the headline must carry it alone.
   if (plan.thumbnail)
     ffmpeg([
-      "-ss", String(plan.thumbnail.frame_at), "-i", source,
+      "-ss", String(plan.thumbnail.frame_at), "-i", sources[plan.thumbnail.source ?? 0],
       ...still(join(layers, "ground.png")),
       ...still(join(layers, "frame.png")),
-      "-filter_complex", framed("[0:v]setpts=PTS-STARTPTS,"),
+      "-filter_complex", framed("[0:v]setpts=PTS-STARTPTS,", 1),
       "-frames:v", "1",
       join(outDir, "cover.png"),
     ]);

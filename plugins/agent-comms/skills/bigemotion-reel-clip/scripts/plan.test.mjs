@@ -121,3 +121,49 @@ test("the SRT carries one cue per caption", () => {
   const srt = toSrt([{ start: 0.5, end: 61.25, text: "Bonjour" }]);
   assert.equal(srt, "1\n00:00:00,500 --> 00:01:01,250\nBonjour\n");
 });
+
+// A montage cuts several sources, in whatever order the argument needs: a
+// clip's third element names its source, a phrase's `source` field does too.
+const montage = (over = {}) =>
+  plan({
+    source: undefined,
+    sources: ["/abs/a.mp4", "/abs/b.mp4"],
+    clips: [
+      [100, 104],
+      [0, 3, 1],
+      [20, 22],
+    ],
+    phrases: [
+      { start: 100.5, end: 103, text: "le constat" },
+      { source: 1, start: 0.5, end: 2.5, text: "l'exemple" },
+      { start: 20.2, end: 21.8, text: "le retour" },
+    ],
+    ...over,
+  });
+
+test("a montage may reorder clips across several sources", () => {
+  assert.deepEqual(validatePlan(montage()), []);
+  assert.equal(reelDuration(montage()), 9);
+  const moved = reelPhrases(montage());
+  assert.deepEqual(
+    moved.map((p) => p.start),
+    [0.5, 4.5, 7.2]
+  );
+});
+
+test("a phrase is only matched against the clips of its own source", () => {
+  const errors = validatePlan(
+    montage({ phrases: [{ start: 1, end: 2, text: "source A, pas B" }] })
+  );
+  assert.match(errors.join(), /outside every clip/);
+});
+
+test("two clips of the same source may not overlap", () => {
+  const errors = validatePlan(montage({ clips: [[100, 104], [103, 106]] }));
+  assert.match(errors.join(), /overlaps clip 1/);
+});
+
+test("a clip naming an unknown source is refused", () => {
+  const errors = validatePlan(montage({ clips: [[0, 3, 2]] }));
+  assert.match(errors.join(), /source 2/);
+});
