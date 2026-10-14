@@ -1,0 +1,7 @@
+{
+  "name": "bigemotion-reel-clip",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test scripts/*.test.mjs" },
+  "dependencies": { "playwright-core": "1.63.0" }
+}

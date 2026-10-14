@@ -17,7 +17,7 @@ Almost everything here is Markdown. The only executable code is the two CI gates
 | `plugins/pr-trains` | skills `review-train`, `fix-train`, `fix-ci-train`, `merge-train`, `issue-train` |
 | `plugins/frontend-fidelity` | skills `reverse-ui`, `blueprint`, `validate-fidelity` |
 | `plugins/code-quality` | skill `ai-code-tells`, agent `code-review` (+ `codex/code-review.toml`, the Codex CLI variant) |
-| `plugins/agent-comms` | skills `attention-architect`, `video-director`, `audience-audit`, `content-strategist` |
+| `plugins/agent-comms` | skills `attention-architect`, `video-director`, `audience-audit`, `content-strategist`, `bigemotion-reel-clip` |
 
 Every plugin is generic by construction: no client names, no infrastructure coordinates, no secrets. New material must arrive already de-branded.
 

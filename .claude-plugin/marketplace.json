@@ -74,7 +74,7 @@
       "name": "agent-comms",
       "source": "./plugins/agent-comms",
       "displayName": "Agent Comms",
-      "description": "Communication skills for short-form video and social publishing: attention-architect writes the script and names the mechanism behind every beat, video-director carries the production decisions and the traps that have already cost time, audience-audit measures what the audience actually does, content-strategist decides what to publish next and where.",
+      "description": "Communication skills for short-form video and social publishing: attention-architect writes the script and names the mechanism behind every beat, video-director carries the production decisions and the traps that have already cost time, audience-audit measures what the audience actually does, content-strategist decides what to publish next and where, bigemotion-reel-clip turns a translated interview excerpt into a captioned LinkedIn clip.",
       "version": "0.2.0",
       "author": {
         "name": "Big Emotion"

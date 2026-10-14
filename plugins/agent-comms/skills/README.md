@@ -135,3 +135,21 @@ Turns an approved subject report into a scene-by-scene reel plan: voice-over, ca
 ```
 
 The packs, and the studio contract the other two skills now follow, are described in the [studio kit](../studio/README.md).
+
+## [`bigemotion-reel-clip`](bigemotion-reel-clip/SKILL.md)
+
+A video and one line in, a LinkedIn-ready folder out.
+
+```
+/agent-comms:bigemotion-reel-clip ~/Downloads/interview.mp4 — arrête-toi après « a great way to reconceptualize Excel »
+```
+
+```
+reel.mp4            4:5, 3 min 37, 64 captions, words lit as they are said
+cover.png           the reel's own frame with the headline, no captions
+descriptions.md     page post (hook = the speaker's sentence) + personal repost
+sous-titres-fr.srt  the captions as a file
+verification.md     cut points, every adaptation choice, rights: open
+```
+
+The headline is checked before anything is drawn: the display face has an ASCII-only character map, so an accented headline is refused rather than rendered in a fallback font.

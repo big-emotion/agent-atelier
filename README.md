@@ -87,6 +87,7 @@ Four skills that hand each other a written artefact, not a conversation: script 
 - [`video-director`](plugins/agent-comms/skills/video-director/SKILL.md) — Everything between an approved script and a publishable file: the format spec, the sourcing discipline, the traps, the packaging.
 - [`audience-audit`](plugins/agent-comms/skills/audience-audit/SKILL.md) — Crosses analytics with the site's own URL inventory and gives every visited page one verdict, in one dated report.
 - [`content-strategist`](plugins/agent-comms/skills/content-strategist/SKILL.md) — Decides what ships next and where, with the comparable's numbers attached — never a menu handed back.
+- [`bigemotion-reel-clip`](plugins/agent-comms/skills/bigemotion-reel-clip/SKILL.md) — Turns a video and a one-line instruction into a 4:5 LinkedIn clip: framed excerpt, French word-by-word captions on the original voice, headline, cover, post copy.
 
 Use cases (prompt → result): [skills/](plugins/agent-comms/skills/README.md)
 

@@ -119,6 +119,30 @@ The first two steps of the idea, structure, produce chain, written generically s
 
 **Don't use them for:** rendering, reading licences, or publishing; those stay server-side or manual.
 
+### `bigemotion-reel-clip` — skill
+
+A production engine for one recurring format: an excerpt of someone else's interview, kept in its original voice, subtitled in French for a LinkedIn feed. Hand it a video file and one line (« arrête-toi quand il dit… ») and it transcribes with word timestamps, cuts on clean speaker boundaries, writes captions that never sharpen what the speaker hedged, and renders a 4:5 clip: the source in a framed window, each French word lit as it is said, a display headline, a logo watermark. It also writes the cover, the post copy (through `attention-architect`) and a verification note listing every adaptation choice and the rights question it cannot settle.
+
+It sits outside the four-step loop on purpose: it is the `video-director` role already decided for one format, so the format is code rather than a conversation.
+
+**Use it when:**
+
+- You want to share a passage of an English-language interview with a French-speaking professional audience
+- You need the post, the cover and the clip together, ready for review in one folder
+
+**Don't use it for:**
+
+- A narrated original video — that is `attention-architect` then `video-director`
+- Publishing — it renders and opens the file; it never posts
+
+**Example:**
+
+```
+/agent-comms:bigemotion-reel-clip ~/Downloads/interview.mp4 — arrête-toi après « a great way to reconceptualize Excel »
+```
+
+Requires FFmpeg on the PATH and a speech-to-text key (`ELEVENLABS_API_KEY`); `npm install` in the skill folder fetches its one dependency, `playwright-core`.
+
 ## What this plugin does not carry
 
 **No SEO skill exists yet.** Search visibility is currently handled inside `audience-audit` (acquisition sources, intent arriving where nothing answers it) and inside project engineering work on metadata. A dedicated skill would own per-page metadata, structured data, internal linking and index coverage — it is a real gap, named here rather than papered over with a thin file.
