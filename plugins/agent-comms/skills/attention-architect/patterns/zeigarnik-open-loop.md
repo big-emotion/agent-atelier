@@ -86,6 +86,17 @@ Within the loops, the shape matters too: the flat assertion (Nigeria, 861) beat
 the direct question (Afrique, 706) on the same channel in the same week. One
 week, one channel, three data points — a direction, not a law.
 
+## Sightings outside our record
+
+- **Carousel, slide to slide** (borrowed, 2026-11-14). @christelle_lebrun_arch's
+  10-slide carousel on diaspora housing ends nearly every slide on a re-open:
+  slide 1 *"Parce que, honnêtement…"*, slide 3 *"Et bien sûr ça vient de
+  quelque part !"*. On a carousel each swipe is a small click, and the loop
+  sets the cost of not swiping. It is the exit re-open (doctrine §5) used
+  between slides instead of once at the end. Filed with the hook it carries in
+  [contrarian-verdict](contrarian-verdict.md).
+
 ## Related
 
 - `references/doctrine.md` §2 (hook shapes), §5 (exit re-open), §7 (paying the debt)
+- [contrarian-verdict](contrarian-verdict.md): a verdict hook that relies on this loop
