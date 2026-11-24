@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-24
+
 ### Fixed
 
 - **agent-comms** studio: guide-mode answers were refused when the model drifted from the exact header ("Il manque le fichier cards.json" although the block was there). `parseGuideAnswer` now accepts the common header variants (`### x`, `**x**`, `File: x`, `Fichier : x`, `x:`, `--- x ---`, a path prefix, any case), an optional end marker, a fence around the content and trailing chat prose; it assigns an unlabeled or mis-named JSON block to the single deliverable it structurally fits and reports it in a new `assumptions` list (`recognised-by-content`). Loose headers count only for the step's own deliverable names, JSON is never repaired (comments and trailing commas give `invalid-json` with line and column), and the result stays `{ files, problems }` plus `assumptions`. New exported `normaliseAnswerHeader`; `renderGuidePrompt` shortens the answer-format instruction and shows the exact block once.
@@ -68,7 +70,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - First production-readiness audit (`docs/PRODUCTION-READINESS-AUDIT.md`): 8.1/10.
 - Real-world validation of M1+M2 on a live consumer repo: green PR, hooks active, one pre-existing lint bug caught.
 
-[Unreleased]: https://github.com/big-emotion/agent-atelier/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/big-emotion/agent-atelier/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/big-emotion/agent-atelier/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/big-emotion/agent-atelier/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/big-emotion/agent-atelier/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/big-emotion/agent-atelier/releases/tag/v0.1.0

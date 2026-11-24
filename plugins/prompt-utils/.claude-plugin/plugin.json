@@ -1,7 +1,7 @@
 {
   "name": "prompt-utils",
   "displayName": "Prompt Utils",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Prompt-crafting utilities: /expertify rewrites a lay prompt with the precise professional role and domain terminology, /interview probes until your real intent is clear, /thought captures surprising model answers, /repo-scout breaks down any GitHub repo into reusable parts.",
   "author": {
     "name": "Big Emotion"

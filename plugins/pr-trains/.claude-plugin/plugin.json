@@ -1,7 +1,7 @@
 {
   "name": "pr-trains",
   "displayName": "PR Trains",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Batch operators for GitHub queues: review-train reviews every open PR, fix-train applies requested changes, fix-ci-train turns red CI green, merge-train fixes and merges in dependency order, issue-train triages and builds one PR per actionable issue — all with parallel sub-agents and one grouped confirmation.",
   "author": {
     "name": "Big Emotion"

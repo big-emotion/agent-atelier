@@ -1,7 +1,7 @@
 {
   "name": "frontend-fidelity",
   "displayName": "Frontend Fidelity",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Pixel-fidelity pipeline for frontend work: reverse-ui extracts a complete reproduction kit from any web app, blueprint turns it into a buildable frontend spec, validate-fidelity catches drift between spec, implementation, and the original.",
   "author": {
     "name": "Big Emotion"

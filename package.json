@@ -1,6 +1,6 @@
 {
   "name": "@big-emotion/agent-atelier",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "license": "MIT",
   "description": "Agent Atelier: Big Emotion's curated, open-source collection of Claude Code skills, commands, and agents — packaged as a multi-plugin marketplace.",
